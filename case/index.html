@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#eef1f5" />
+<title>Case · Sala D'Oro</title>
+<style>
+:root{
+  --bg:#eef1f5;
+  --bg-2:#f7f8fb;
+  --line:rgba(15,23,42,.08);
+  --text:#0f172a;
+  --muted:#667085;
+  --accent:#0f172a;
+  --accent-2:#64748b;
+  --good:#22c55e;
+  --danger:#ef4444;
+  --warn:#f59e0b;
+  --gold:#b69255;
+  --shadow:0 18px 40px rgba(15,23,42,.08);
+  --radius:28px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  margin:0;color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(255,255,255,.9), transparent 18%),
+    radial-gradient(circle at 80% 10%, rgba(100,116,139,.10), transparent 20%),
+    linear-gradient(145deg,#e9edf3 0%,var(--bg) 42%,var(--bg-2) 100%);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.shell{max-width:1200px;margin:0 auto;padding:16px 16px 96px}
+.top{
+  position:sticky;top:0;z-index:40;
+  margin:-16px -16px 16px;padding:14px 16px 10px;
+  background:rgba(238,241,245,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line);
+}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.brandrow h1{margin:2px 0 0;font-size:22px;letter-spacing:-.04em}
+.brandrow .who{color:var(--muted);font-size:12px;text-align:right}
+.nav{display:flex;gap:8px;overflow:auto;margin-top:12px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.navbtn{
+  border:1px solid var(--line);background:rgba(255,255,255,.72);color:var(--muted);
+  border-radius:999px;padding:10px 14px;white-space:nowrap;font-size:13px;font-weight:700;
+}
+.navbtn.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.74));
+  border:1px solid var(--line);backdrop-filter:blur(20px);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.section{padding:20px;margin-bottom:14px}
+.section h2{margin:0 0 12px;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+.muted{color:var(--muted)}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  background:rgba(15,23,42,.05);border:1px solid var(--line);font-weight:800;
+}
+.hero{padding:24px;margin-bottom:14px}
+.hero h2{margin:12px 0 8px;font-size:clamp(1.9rem,4.5vw,3rem);line-height:1;letter-spacing:-.05em;text-transform:none;color:var(--text)}
+.hero p{margin:0;color:var(--muted);line-height:1.55;max-width:60ch}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+.kpi{padding:14px;border-radius:20px;background:rgba(255,255,255,.85);border:1px solid var(--line)}
+.kpi .l{color:var(--muted);font-size:.8rem}
+.kpi .v{margin-top:5px;font-size:1.55rem;font-weight:850;letter-spacing:-.04em}
+.homegrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.module{
+  display:grid;gap:8px;padding:20px;text-align:left;
+  background:rgba(255,255,255,.86);border:1px solid var(--line);border-radius:24px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.module:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.module strong{font-size:1.05rem;letter-spacing:-.02em}
+.module span{color:var(--muted);font-size:.86rem;line-height:1.45}
+.module .tag{width:fit-content;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.pill{
+  display:inline-flex;align-items:center;justify-content:center;padding:6px 11px;border-radius:999px;
+  font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;
+}
+.pill.good{background:rgba(34,197,94,.12);color:#15803d}
+.pill.warn{background:rgba(245,158,11,.14);color:#b45309}
+.pill.danger{background:rgba(239,68,68,.12);color:#b91c1c}
+.pill.neutral{background:rgba(15,23,42,.06);color:var(--muted)}
+.pill.gold{background:rgba(182,146,85,.14);color:#8a6a33}
+.btn{
+  border:0;border-radius:16px;padding:13px 16px;font-weight:750;color:#fff;
+  background:linear-gradient(135deg,#0f172a,#334155);
+  box-shadow:0 12px 24px rgba(15,23,42,.14);
+}
+.btn.secondary{color:var(--text);background:rgba(255,255,255,.8);border:1px solid var(--line);box-shadow:none}
+.btn.small{padding:9px 12px;font-size:.82rem;border-radius:12px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+input,select,textarea{
+  width:100%;padding:13px 14px;border-radius:16px;border:1px solid var(--line);
+  background:rgba(255,255,255,.9);color:var(--text);outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:rgba(15,23,42,.2);box-shadow:0 0 0 4px rgba(15,23,42,.05)}
+textarea{min-height:84px;resize:vertical}
+label{display:block;margin:0 0 6px;color:var(--muted);font-size:.8rem}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.list{display:grid;gap:10px}
+.item{
+  padding:14px;border-radius:18px;background:rgba(255,255,255,.86);border:1px solid var(--line);
+}
+.item .toprow{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.item h4{margin:0;font-size:.98rem;letter-spacing:-.02em}
+.item .meta{margin-top:4px;color:var(--muted);font-size:.85rem;line-height:1.45}
+.item .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+/* Trilha */
+.levels{display:grid;gap:12px}
+.level{padding:18px}
+.levelhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.levelhead strong{font-size:1.02rem;letter-spacing:-.02em}
+.progressline{height:7px;border-radius:999px;background:rgba(15,23,42,.08);overflow:hidden;margin:8px 0 12px}
+.progressline span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#0f172a,#0f766e)}
+.missions{display:grid;gap:8px}
+.mission{
+  display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:12px;
+  padding:12px;border-radius:16px;background:rgba(255,255,255,.85);border:1px solid var(--line);text-align:left;
+}
+.mission:disabled{opacity:.5;cursor:not-allowed}
+.mnum{
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(15,23,42,.06);color:var(--muted);font-size:.8rem;font-weight:900;
+}
+.mission.done .mnum{background:rgba(34,197,94,.15);color:#15803d}
+.mission strong{display:block;font-size:.92rem}
+.mission small{display:block;color:var(--muted);margin-top:2px}
+/* Missão aberta */
+.missionview{display:grid;gap:14px}
+.steps{display:grid;gap:8px}
+.step{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;padding:11px 12px;border-radius:14px;background:rgba(248,250,252,.9);border:1px solid var(--line)}
+.step b{display:grid;place-items:center;width:24px;height:24px;border-radius:999px;background:rgba(182,146,85,.16);color:#8a6a33;font-size:.75rem}
+.step p{margin:0;color:var(--text);font-size:.9rem;line-height:1.5}
+.choice{
+  display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;
+  padding:13px;border-radius:14px;background:#fff;border:1px solid var(--line);line-height:1.45;font-size:.92rem;
+}
+.choice.correct{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.08)}
+.choice.wrong{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07)}
+.feedback{padding:13px;border-radius:14px;font-size:.9rem;line-height:1.5}
+.feedback.ok{background:rgba(34,197,94,.1);color:#166534;border:1px solid rgba(34,197,94,.25)}
+.feedback.no{background:rgba(239,68,68,.08);color:#991b1b;border:1px solid rgba(239,68,68,.2)}
+/* Busca */
+.searchbox input{padding:16px 18px;border-radius:20px;font-size:1rem}
+.hits{display:grid;gap:10px;margin-top:12px}
+.popcard{padding:14px;border-radius:18px;background:rgba(255,255,255,.88);border:1px solid var(--line)}
+.popcard summary{cursor:pointer;font-weight:750;letter-spacing:-.02em;display:flex;justify-content:space-between;gap:10px;align-items:center;list-style:none}
+.popcard summary::-webkit-details-marker{display:none}
+.popcard ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:.9rem;line-height:1.6}
+mark{background:rgba(182,146,85,.28);color:inherit;border-radius:3px;padding:0 2px}
+/* Tabs internos */
+.subtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.subtab{border:1px solid var(--line);background:rgba(255,255,255,.72);color:var(--muted);border-radius:999px;padding:8px 13px;font-size:.82rem;font-weight:700}
+.subtab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+/* Semana */
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.day{padding:12px;border-radius:16px;background:rgba(255,255,255,.84);border:1px solid var(--line);min-height:110px}
+.day.today{border-color:rgba(15,23,42,.25);background:#fff}
+.day .name{font-weight:800;margin-bottom:6px;font-size:.86rem}
+.day .small{color:var(--muted);font-size:.78rem;line-height:1.45}
+/* Lista da vez */
+.vezname{font-size:clamp(2.6rem,8vw,4rem);letter-spacing:-.06em;line-height:.95;font-weight:900;margin:10px 0 6px;color:var(--text)}
+.rank{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(15,23,42,.06);color:var(--muted);font-size:.78rem;font-weight:900;flex:0 0 auto}
+.rank.star{background:var(--gold);color:#fff}
+.vrow{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid rgba(15,23,42,.05)}
+.vrow:last-child{border-bottom:0}
+.vrow .grow{flex:1;min-width:0}
+.vrow .rname{font-weight:750;font-size:.94rem}
+.vrow .rsub{font-size:.8rem;color:var(--muted);margin-top:1px}
+.notice{
+  padding:13px;border-radius:16px;border:1px solid rgba(182,146,85,.28);
+  background:rgba(182,146,85,.08);color:#6b5326;font-size:.86rem;line-height:1.5;margin-bottom:12px;
+}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.4);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:14px}
+.modal.open{display:flex}
+.sheet{width:100%;max-width:540px;background:#fff;border:1px solid var(--line);border-radius:26px 26px 18px 18px;padding:20px;box-shadow:var(--shadow)}
+.sheet h3{margin:0 0 4px;font-size:1.2rem;letter-spacing:-.03em}
+.sheet p{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 14px}
+.footbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:39;
+  background:rgba(238,241,245,.9);backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  padding:8px 12px calc(8px + env(safe-area-inset-bottom));
+}
+.footinner{max-width:1200px;margin:0 auto;display:flex;gap:6px}
+.footbtn{flex:1;border:0;background:transparent;color:var(--muted);border-radius:12px;padding:9px 4px;font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.footbtn.on{background:#fff;color:var(--text);box-shadow:0 6px 16px rgba(15,23,42,.08)}
+.hidden{display:none!important}
+@media(max-width:860px){
+  .grid2{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .calendar{grid-template-columns:1fr 1fr}
+  .homegrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="brandrow">
+      <div>
+        <div class="kicker">Case · Sala D'Oro</div>
+        <h1 id="viewTitle">Início</h1>
+      </div>
+      <div class="who" id="whoBox">Equipe de Relacionamento</div>
+    </div>
+    <div class="nav" id="mainNav"></div>
+  </header>
+  <main id="main"></main>
+</div>
+
+<div class="footbar">
+  <div class="footinner" id="footNav"></div>
+</div>
+
+<div class="modal" id="modal" onclick="if(event.target.id==='modal')closeModal()">
+  <div class="sheet">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <div id="modalBody"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn secondary small" onclick="closeModal()">Cancelar</button>
+      <button class="btn small" id="modalConfirm">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ DADOS OPERACIONAIS (fonte: POP Recepção + Matriz de Ativações + Cronograma) ============ */
+
+const POPS = [
+  {id:"abertura", title:"Abertura do Salão", group:"Rotina", steps:[
+    "Conferir entrada, área de espera, balcão, vitrine de produtos e materiais de atendimento.",
+    "Conferir funcionamento de telefone, internet, som, ar-condicionado, máquinas de cartão e impressora de nota fiscal.",
+    "Conferir cartão de visita, bobinas, sacolas, materiais de recepção e itens de apoio.",
+    "Conferir agenda geral do dia: erros, sobreposições, falta de profissional, encaixes sem validação, horários sensíveis.",
+    "Checar lista da vez do dia anterior e validar pendências antes de iniciar novos atendimentos.",
+    "Informar imediatamente a gerência sobre qualquer item que interfira na operação."]},
+  {id:"apresentacao", title:"Apresentação Pessoal", group:"Rotina", steps:[
+    "Manter cabelo arrumado desde o início do expediente, com acabamento profissional.",
+    "Usar uniforme completo, limpo, alinhado e sem sinais de desgaste.",
+    "Manter maquiagem pronta, batom neutro ou suave, sobrancelhas cuidadas.",
+    "Manter unhas feitas, limpas e com cores neutras ou suaves.",
+    "Usar apenas acessórios discretos e simples.",
+    "Corrigir imediatamente qualquer ponto de imagem que reduza a percepção de padrão."]},
+  {id:"agendamento", title:"Agendamento", group:"Agenda", steps:[
+    "Solicitar nome completo e telefone da cliente para localizar ou confirmar cadastro.",
+    "Perguntar qual serviço deseja realizar e se possui profissional de preferência.",
+    "Conferir histórico da cliente: profissional recorrente, preferências e restrições.",
+    "Validar disponibilidade do profissional escolhido e oferecer horários próximos quando necessário.",
+    "Se não houver preferência, utilizar a lista da vez de forma discreta, justa e registrada.",
+    "Em caso de encaixe, validar com o profissional e garantir que não comprometa outra cliente.",
+    "Confirmar data, horário, serviço, profissional e unidade antes de finalizar.",
+    "Registrar origem da preferência quando cliente nova pedir profissional específico."]},
+  {id:"cadastro", title:"Cadastro de Cliente", group:"Agenda", steps:[
+    "Solicitar nome completo, telefone, data de aniversário e informações essenciais com gentileza.",
+    "Perguntar se deseja informar e-mail e CPF para emissão de nota fiscal.",
+    "Registrar origem da cliente: indicação, tráfego pago, Instagram, profissional, retorno espontâneo ou parceria.",
+    "Atualizar dados sempre que houver divergência ou informação incompleta.",
+    "Agradecer e confirmar que o cadastro foi concluído."]},
+  {id:"telefone", title:"Atendimento Telefônico e WhatsApp", group:"Agenda", steps:[
+    "Atender ou responder com saudação, nome do Sala D'Oro e identificação pessoal.",
+    "Entender a necessidade da cliente antes de oferecer horário.",
+    "Conferir ou criar cadastro conforme necessidade.",
+    "Agendar, alterar ou cancelar seguindo as regras de agenda.",
+    "Esclarecer dúvidas com segurança ou direcionar para a pessoa correta.",
+    "Oferecer serviço adicional coerente com a necessidade da cliente.",
+    "Encerrar confirmando as informações e agradecendo o contato.",
+    "Retomar conversas em aberto conforme regra de follow-up D0, D1, D3, D5 e D7."]},
+  {id:"primeirocontato", title:"Primeiro Contato no Salão", group:"Experiência", steps:[
+    "Receber a cliente com sorriso, postura e cumprimento adequado ao turno.",
+    "Se apresentar e chamar a cliente pelo nome quando possível.",
+    "Confirmar atendimento, profissional e horário.",
+    "Oferecer água, café, chá e senha do Wi-Fi.",
+    "Acomodar e acompanhar até o profissional ou sala correta.",
+    "Zelar pela cliente entre atendimentos, principalmente em espera, troca de serviço ou deslocamento interno."]},
+  {id:"listadavez", title:"Lista da Vez", group:"Agenda", steps:[
+    "Identificar o serviço solicitado e consultar a lista correspondente.",
+    "Identificar o profissional da vez e verificar disponibilidade real.",
+    "Confirmar possibilidade de atendimento com o profissional quando houver encaixe.",
+    "Se o profissional não puder atender, registrar a situação e passar para o próximo conforme regra.",
+    "Anular posições de profissionais ausentes no dia.",
+    "Registrar nome da cliente, serviço, profissional, data, horário e responsável.",
+    "Agendamento antecipado: marcar provisoriamente e confirmar após a presença da cliente.",
+    "Corrigir a lista em caso de falta, cancelamento ou remarcação conforme orientação da gerência."]},
+  {id:"espera", title:"Cliente em Espera", group:"Experiência", steps:[
+    "Informar o motivo da espera com transparência e pedir desculpas pelo desconforto.",
+    "Informar tempo estimado e perguntar se a cliente consegue aguardar.",
+    "Oferecer água, café, chá, Wi-Fi e acomodação adequada.",
+    "Oferecer serviço viável durante a espera, quando fizer sentido.",
+    "Cronometrar o tempo informado e reposicionar a cliente antes do limite combinado.",
+    "Se a espera aumentar, explicar novamente, pedir desculpas e oferecer alternativa.",
+    "Acionar a gerência se a espera comprometer a experiência."]},
+  {id:"revenda", title:"Revenda de Produtos", group:"Comercial", steps:[
+    "Perguntar se algum produto foi indicado pelo profissional.",
+    "Sem indicação, entender a necessidade da cliente antes de sugerir.",
+    "Apresentar produto adequado, modo de uso, benefício e complementar quando pertinente.",
+    "Permitir que a cliente veja, toque ou conheça a textura do produto.",
+    "Confirmar se pode entrar em contato depois para acompanhar resultado.",
+    "Embalar com cuidado, cobrar, emitir nota quando solicitado e agradecer."]},
+  {id:"interno", title:"Atendimento Interno da Equipe", group:"Rotina", steps:[
+    "Realizar agendamentos, alterações e cancelamentos solicitados por profissionais conforme regra da gerência.",
+    "Orientar profissionais sobre agenda, lista da vez, encaixes, horários e fluxo do dia.",
+    "Alterar agenda apenas com autorização quando impactar cliente, faturamento ou outro profissional.",
+    "Informar gerência sobre atraso, ausência, erro ou conflito.",
+    "Priorizar sempre a cliente em relação a demandas internas.",
+    "Comunicar alterações de agenda aos profissionais envolvidos."]},
+  {id:"cobranca", title:"Cobrança e Fechamento da Experiência", group:"Comercial", steps:[
+    "Cumprimentar a cliente e localizar a comanda no sistema.",
+    "Confirmar os serviços realizados antes da cobrança.",
+    "Em divergência, consultar quem lançou antes de editar e comunicar profissional e gerência.",
+    "Informar valor total com discrição e clareza.",
+    "Perguntar se a cliente ficou feliz com o atendimento antes de finalizar.",
+    "Se houver insatisfação, não concluir a cobrança sem acionar a gerência.",
+    "Realizar pagamento e organizar comprovantes por forma e bandeira.",
+    "Perguntar sobre próxima visita e produto para casa.",
+    "Nunca permitir saída sem pagamento validado, salvo orientação expressa da gerência."]},
+  {id:"caixa", title:"Fechamento de Caixa", group:"Rotina", steps:[
+    "Conferir pagamentos em débito, crédito, dinheiro e demais formas aceitas.",
+    "Comparar comprovantes físicos, sistema e movimentação do dia.",
+    "Realizar fechamento no sistema.",
+    "Organizar comprovantes conforme padrão interno.",
+    "Comunicar imediatamente qualquer divergência para a gerência.",
+    "Registrar pendências ou ajustes que precisem de acompanhamento."]},
+  {id:"followup", title:"Follow-up e Ativações", group:"Relacionamento", steps:[
+    "Executar follow-ups D0, D1, D3, D5 e D7 para leads sem resposta ou em negociação.",
+    "Classificar cada contato por etapa do funil: lead novo, contato feito, qualificado, oferta enviada, em objeção, agendado ou perdido.",
+    "Ativar aniversariantes, inativas, canceladas, faltantes e serviços recorrentes vencidos.",
+    "Registrar tentativa, canal, resposta, próxima ação e resultado.",
+    "Sem horário ou profissional disponível: registrar motivo para análise da gerência.",
+    "Reportar semanalmente ativações, respostas, agendamentos e perdas por indisponibilidade."]}
+];
+
+/* Matriz de Ativações — da planilha oficial (Julho) */
+const ATIVACOES = [
+  {id:"d0d7", nome:"Sequência de conversão D0–D7", freq:"Diário", dia:"Todos os dias", dow:[1,2,3,4,5,6], publico:"Clientes e leads do dia 0 ao dia 7", criterio:"Conversas em aberto sem resposta"},
+  {id:"pos", nome:"Pós-atendimento", freq:"Diário", dia:"1 dia após atendimento", dow:[1,2,3,4,5,6], publico:"Cliente atendida ontem", criterio:"Cliente nova realizou serviço no dia anterior"},
+  {id:"faltantes", nome:"Faltantes / Canceladas", freq:"Semanal", dia:"Quinta", dow:[4], publico:"Clientes faltantes", criterio:"Clientes que faltaram e precisam de retomada"},
+  {id:"clube30", nome:"Ação Clube D'Oro 30 dias", freq:"Quinzenal", dia:"Quinzenal", dow:[1], publico:"Clientes dentro do prazo", criterio:"Clientes dentro de 30 dias no máximo"},
+  {id:"indica3", nome:"Ação Indica 3", freq:"Pontual", dia:"Pontualmente", dow:[], publico:"180 melhores clientes", criterio:"Clientes indicam 3 pessoas"},
+  {id:"recorrentes", nome:"Ativações por serviço recorrente", freq:"Semanal", dia:"Terça", dow:[2], publico:"Clientes no tempo médio de retorno", criterio:"Clientes dentro da janela de retorno"},
+  {id:"inativas", nome:"Clientes inativas", freq:"Mensal", dia:"Pontualmente", dow:[], publico:"Clientes de alto valor sem retorno", criterio:"Ticket ou frequência alta, sem visita há 45+ dias"},
+  {id:"aniversariantes", nome:"Aniversariantes", freq:"Mensal", dia:"Semana anterior à virada do mês", dow:[], publico:"Aniversariantes do próximo mês", criterio:"Aniversariantes contatadas no mês"}
+];
+
+/* Cronograma semanal de recepção */
+const CRONOGRAMA = {
+  1:{title:"Segunda — rotina e priorização", tasks:[
+    {id:"seg_agenda", t:"Conferir agenda do dia", d:"Encaixes, lacunas e horários críticos."},
+    {id:"seg_ausencias", t:"Atualizar ausências", d:"Faltas e impacto na operação."},
+    {id:"seg_faltantes", t:"Revisar faltantes e canceladas", d:"Separar clientes que precisam de retomada."}]},
+  2:{title:"Terça — contato e ativação", tasks:[
+    {id:"ter_followup", t:"Retomar conversas em aberto", d:"Leads e clientes sem resposta."},
+    {id:"ter_servico", t:"Ativação por serviço recorrente", d:"Clientes na janela de retorno."},
+    {id:"ter_whats", t:"Responder WhatsApp pendente", d:"Canais vivos e sem atraso."}]},
+  3:{title:"Quarta — controle e organização", tasks:[
+    {id:"qua_vitrine", t:"Limpeza das vitrines", d:"Organização visual e padrão de salão."},
+    {id:"qua_estoque", t:"Inventário de revenda", d:"Contagem e ajuste de estoque."},
+    {id:"qua_ocorrencias", t:"Atualizar ocorrências", d:"Pendências, desvios e validações."}]},
+  4:{title:"Quinta — fechamento de fila", tasks:[
+    {id:"qui_faltantes", t:"Ativar faltantes e canceladas", d:"Reagendar e recuperar agenda."},
+    {id:"qui_noshow", t:"Atualizar não atendidas", d:"Registrar e definir próxima ação."},
+    {id:"qui_ativacoes", t:"Atualizar ativações", d:"Fechar o que gerou agendamento."}]},
+  5:{title:"Sexta — confirmação e corte", tasks:[
+    {id:"sex_confirma", t:"Confirmação de agenda", d:"Garantir presença do dia seguinte."},
+    {id:"sex_resultado", t:"Atualizar resultado das ativações", d:"Medir resposta e agendamentos."},
+    {id:"sex_ocorrencias", t:"Fechar ocorrências", d:"Organizar o que ficou aberto."}]},
+  6:{title:"Sábado — operação viva", tasks:[
+    {id:"sab_vez", t:"Conferir lista da vez", d:"Prioridade do dia e ordem da fila."},
+    {id:"sab_pos", t:"Pós-atendimento", d:"Registrar experiência e retorno."},
+    {id:"sab_noatt", t:"Atualizar não atendida", d:"Marcar recuperação imediata."}]},
+  0:{title:"Domingo — preparação", tasks:[
+    {id:"dom_previa", t:"Prévia de segunda", d:"Prioridades e brechas prontas."},
+    {id:"dom_controle", t:"Revisão de controle", d:"Checar pendências da semana."}]}
+};
+
+/* Trilha de treinamentos — do fundamento ao avançado, ancorada nos POPs */
+const TRILHA = [
+  {id:"n1", nome:"Nível 1 · Fundamentos", desc:"Padrão da casa: postura, imagem e abertura impecável.", missoes:[
+    {id:"m1", t:"Padrão geral de execução", pop:null, resumo:"Educação, objetividade, registro e comunicação imediata de desvios. Nunca improvisar fora do padrão.",
+      steps:["Tratar clientes, equipe e parceiros com educação, objetividade e postura profissional.","Manter apresentação, ambiente, materiais e registros no padrão da empresa.","Registrar informações relevantes no sistema ou controle correspondente.","Comunicar imediatamente atraso, divergência, risco ou erro de agenda.","Em caso de dúvida, acionar a gerência — nunca improvisar."],
+      quiz:{q:"Você percebe um erro na agenda que pode afetar uma cliente daqui a 2 horas. O que fazer?", opts:["Esperar para ver se o problema se resolve sozinho","Comunicar imediatamente a gerência e registrar a situação","Corrigir por conta própria sem avisar ninguém"], correct:1, exp:"Desvios se comunicam imediatamente. A correção pode até ser sua, mas a gerência precisa saber e o registro precisa existir."}},
+    {id:"m2", t:"Apresentação pessoal", pop:"apresentacao", resumo:"Sua imagem é a primeira prova do padrão Sala D'Oro.",
+      quiz:{q:"Qual das opções está DENTRO do padrão de apresentação?", opts:["Unhas feitas com cores neutras e acessórios discretos","Uniforme com sinais de desgaste, mas limpo","Maquiagem carregada para impressionar"], correct:0, exp:"O padrão pede acabamento profissional e discrição: unhas neutras, acessórios simples, uniforme impecável."}},
+    {id:"m3", t:"Abertura do salão", pop:"abertura", resumo:"Checklist físico + sistemas + agenda + lista da vez do dia anterior.",
+      quiz:{q:"Antes de iniciar novos atendimentos, o que precisa ser validado da véspera?", opts:["Somente o caixa do dia anterior","A lista da vez do dia anterior e suas pendências","Nada — cada dia começa do zero"], correct:1, exp:"A lista da vez da véspera carrega pendências que afetam a justiça do rodízio de hoje."}}]},
+  {id:"n2", nome:"Nível 2 · Agenda e Cadastro", desc:"O coração da operação: agendar certo, cadastrar completo.", missoes:[
+    {id:"m4", t:"Cadastro de cliente", pop:"cadastro", resumo:"Nome, telefone, aniversário, origem. Cadastro incompleto é ativação perdida.",
+      quiz:{q:"Por que registrar a ORIGEM da cliente (indicação, Instagram, tráfego)?", opts:["É exigência fiscal","Alimenta as ativações e mostra qual canal traz cliente","Apenas curiosidade da gerência"], correct:1, exp:"Origem alimenta a Matriz de Ativações (ex: Indica 3) e orienta onde investir."}},
+    {id:"m5", t:"Agendamento", pop:"agendamento", resumo:"Histórico, preferência, disponibilidade, confirmação. Sem preferência → lista da vez.",
+      quiz:{q:"Cliente nova liga e NÃO tem profissional de preferência. Como distribuir?", opts:["Escolher o profissional mais simpático","Dar para quem estiver por perto na hora","Usar a lista da vez de forma discreta, justa e registrada"], correct:2, exp:"É exatamente o que o POP define: lista da vez, discreta, justa e registrada."}},
+    {id:"m6", t:"Telefone e WhatsApp", pop:"telefone", resumo:"Saudação padrão, entender antes de ofertar, follow-up D0–D7.",
+      quiz:{q:"Uma conversa de WhatsApp ficou sem resposta da cliente há 3 dias. O que o padrão manda?", opts:["Aguardar a cliente responder quando quiser","Retomar conforme a régua D0, D1, D3, D5 e D7","Apagar a conversa para limpar a caixa"], correct:1, exp:"A régua de follow-up D0–D7 existe para nenhuma conversa morrer em aberto."}}]},
+  {id:"n3", nome:"Nível 3 · Experiência da Cliente", desc:"Do primeiro sorriso à espera bem gerida.", missoes:[
+    {id:"m7", t:"Primeiro contato no salão", pop:"primeirocontato", resumo:"Sorriso, nome, água/café/Wi-Fi, acompanhamento até o profissional.",
+      quiz:{q:"A cliente chegou e o profissional ainda está finalizando outro atendimento. O que fazer?", opts:["Deixar aguardando em pé até o profissional aparecer","Acomodar, oferecer água/café/Wi-Fi e zelar por ela na espera","Pedir que volte em 30 minutos"], correct:1, exp:"Zelar pela cliente entre atendimentos é parte do POP de primeiro contato."}},
+    {id:"m8", t:"Cliente em espera", pop:"espera", resumo:"Transparência + tempo estimado + cronometrar + reposicionar antes do limite.",
+      quiz:{q:"Você informou 15 minutos de espera. Aos 12 minutos o atraso vai aumentar. Qual a ação correta?", opts:["Esperar a cliente reclamar para explicar","Explicar de novo, pedir desculpas e oferecer alternativa ANTES do limite","Fingir que não percebeu o atraso"], correct:1, exp:"O POP manda cronometrar e reposicionar a cliente antes do limite combinado."}},
+    {id:"m9", t:"Lista da vez", pop:"listadavez", resumo:"Ordem fixa, marcador gira, ausente anula posição, tudo registrado.",
+      quiz:{q:"O profissional da vez não pode atender o encaixe. O que fazer?", opts:["Cancelar o encaixe","Registrar a situação e passar para o próximo conforme regra","Escolher qualquer um que esteja livre, sem registrar"], correct:1, exp:"Registrar e seguir a regra mantém o rodízio justo e auditável."}}]},
+  {id:"n4", nome:"Nível 4 · Comercial e Fechamento", desc:"Revenda, cobrança e caixa sem fricção.", missoes:[
+    {id:"m10", t:"Revenda de produtos", pop:"revenda", resumo:"Indicação do profissional primeiro; sem indicação, necessidade antes de sugestão.",
+      quiz:{q:"Qual o primeiro passo na revenda?", opts:["Mostrar o produto mais caro da vitrine","Perguntar se algum produto foi indicado pelo profissional","Dar desconto para fechar rápido"], correct:1, exp:"A indicação do profissional tem prioridade — ela conecta o produto à necessidade real."}},
+    {id:"m11", t:"Cobrança e fechamento", pop:"cobranca", resumo:"Confirmar serviços, perguntar se ficou feliz ANTES de cobrar, nunca sair sem pagamento validado.",
+      quiz:{q:"A cliente demonstra insatisfação na hora de pagar. O que o padrão exige?", opts:["Concluir a cobrança rápido para não criar constrangimento","Não concluir a cobrança sem acionar a gerência","Dar desconto por conta própria"], correct:1, exp:"Insatisfação trava a cobrança até a gerência entrar — é a última chance de salvar a experiência."}},
+    {id:"m12", t:"Fechamento de caixa", pop:"caixa", resumo:"Conferir formas de pagamento, comparar comprovantes × sistema, reportar divergências.",
+      quiz:{q:"Os comprovantes físicos não batem com o sistema. Qual a atitude correta?", opts:["Ajustar o sistema para bater e seguir em frente","Comunicar imediatamente a divergência para a gerência","Deixar para conferir amanhã"], correct:1, exp:"Divergência de caixa é comunicação imediata — nunca ajuste silencioso."}}]},
+  {id:"n5", nome:"Nível 5 · Relacionamento Avançado", desc:"A máquina de ativação: follow-up, funil e recuperação de agenda.", missoes:[
+    {id:"m13", t:"Follow-up D0–D7 e funil", pop:"followup", resumo:"Régua de contato + classificação por etapa do funil + registro de cada tentativa.",
+      quiz:{q:"Uma lead recebeu oferta e sumiu. Em qual etapa do funil ela está e o que fazer?", opts:["Perdida — descartar o contato","Em objeção/oferta enviada — seguir a régua D0–D7 registrando cada tentativa","Agendada — esperar ela aparecer"], correct:1, exp:"Oferta enviada sem resposta entra na régua de retomada, com registro de tentativa, canal e próxima ação."}},
+    {id:"m14", t:"Matriz de ativações", pop:null, resumo:"As 8 ações da matriz: D0–D7, pós-atendimento, faltantes, Clube 30 dias, Indica 3, recorrentes, inativas, aniversariantes.",
+      steps:["Sequência D0–D7: diário, conversas em aberto do dia 0 ao 7.","Pós-atendimento: diário, cliente atendida ontem.","Faltantes/Canceladas: semanal (quinta), recuperar agenda perdida.","Clube D'Oro 30 dias: quinzenal, clientes dentro do prazo.","Indica 3: pontual, 180 melhores clientes.","Serviço recorrente: semanal (terça), janela de retorno.","Inativas: mensal, alto valor sem visita há 45+ dias.","Aniversariantes: mensal, semana anterior à virada."],
+      quiz:{q:"Hoje é quinta-feira. Qual ativação da matriz é prioridade do dia?", opts:["Aniversariantes do próximo mês","Faltantes e canceladas","Ativação por serviço recorrente"], correct:1, exp:"Quinta é o dia recomendado de faltantes/canceladas — recuperar agenda perdida com velocidade."}},
+    {id:"m15", t:"Reporte semanal", pop:null, resumo:"Fechar a semana com números: ativações, respostas, agendamentos e perdas por indisponibilidade.",
+      steps:["Consolidar ativações realizadas na semana por tipo de ação.","Contar respostas e agendamentos gerados.","Registrar perdas por falta de horário ou profissional, com motivo.","Reportar à gerência no fechamento de sexta."],
+      quiz:{q:"Uma cliente quis agendar mas não havia horário. Isso entra no reporte?", opts:["Não — se não agendou, não conta","Sim — perda por indisponibilidade, com motivo registrado para análise","Só se ela reclamar formalmente"], correct:1, exp:"Perda por indisponibilidade é dado de gestão: mostra demanda reprimida e orienta a agenda."}}]}
+];
+
+/* Lista da vez — categorias e regras do Motor de Distribuição */
+const VEZ_DEFAULT_CATS = [
+  {id:"cab", name:"Cabeleireiros", profs:["Ana","Bianca","Carla","Dani","Elisa"]},
+  {id:"man", name:"Manicures", profs:["Alice","Bruna","Camila","Débora"]},
+  {id:"dep", name:"Depilação", profs:["Paula","Renata"]},
+  {id:"sob", name:"Sobrancelha / Make", profs:["Taís","Vera"]}
+];
+
+/* ============ ESTADO ============ */
+const KEY="case_saladoro_v1";
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function todayBR(){return new Date().toLocaleDateString("pt-BR")}
+function nowBR(){return new Date().toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+
+function freshVezState(){
+  const st={};
+  VEZ_DEFAULT_CATS.forEach(c=>{
+    st[c.id]={pointer:0,day:todayBR(),
+      statuses:Object.fromEntries(c.profs.map(n=>[n,"present"])),
+      counts:Object.fromEntries(c.profs.map(n=>[n,0]))};
+  });
+  return st;
+}
+function load(){
+  try{
+    const raw=localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch{}
+  return {
+    user:"", view:"home",
+    training:{done:{}},
+    execucoes:[],           // registros de tarefas/ativações
+    vez:{cats:structuredClone(VEZ_DEFAULT_CATS), state:freshVezState(), catAtual:"cab", log:[]}
+  };
+}
+let DB=load();
+function save(){localStorage.setItem(KEY,JSON.stringify(DB))}
+
+/* reset diário de presença na lista da vez */
+function normalizeVez(){
+  DB.vez.cats.forEach(c=>{
+    if(!DB.vez.state[c.id]){
+      DB.vez.state[c.id]={pointer:0,day:todayBR(),
+        statuses:Object.fromEntries(c.profs.map(n=>[n,"present"])),
+        counts:Object.fromEntries(c.profs.map(n=>[n,0]))};
+    }
+    const s=DB.vez.state[c.id];
+    if(s.day!==todayBR()){
+      s.statuses=Object.fromEntries(c.profs.map(n=>[n,"present"]));
+      s.day=todayBR();
+    }
+    c.profs.forEach(n=>{
+      if(!s.statuses[n])s.statuses[n]="present";
+      if(s.counts[n]===undefined)s.counts[n]=0;
+    });
+    s.pointer=Math.min(s.pointer||0,Math.max(0,c.profs.length-1));
+  });
+}
+
+/* ============ NAVEGAÇÃO ============ */
+const VIEWS=[
+  ["home","Início"],["trilha","Treinamentos"],["procedimentos","Procedimentos"],
+  ["tarefas","Tarefas"],["vez","Lista da Vez"]
+];
+let missaoAberta=null;
+let quizEstado=null;
+let subTarefas="hoje";
+let buscaQuery="";
+let vezView="vez";
+
+function setView(v){DB.view=v;missaoAberta=null;quizEstado=null;save();render()}
+
+/* ============ RENDER GERAL ============ */
+function render(){
+  normalizeVez();
+  const nav=VIEWS.map(([id,l])=>`<button class="navbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
+  document.getElementById("mainNav").innerHTML=nav;
+  document.getElementById("footNav").innerHTML=VIEWS.map(([id,l])=>`<button class="footbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
+  document.getElementById("viewTitle").textContent=VIEWS.find(v=>v[0]===DB.view)?.[1]||"Início";
+  document.getElementById("whoBox").textContent=DB.user||"Equipe de Relacionamento";
+  const main=document.getElementById("main");
+  main.innerHTML =
+    DB.view==="trilha" ? renderTrilha() :
+    DB.view==="procedimentos" ? renderProcedimentos() :
+    DB.view==="tarefas" ? renderTarefas() :
+    DB.view==="vez" ? renderVez() :
+    renderHome();
+  afterRender();
+}
+
+/* ============ INÍCIO ============ */
+function statsTraining(){
+  const total=TRILHA.reduce((a,n)=>a+n.missoes.length,0);
+  const done=Object.keys(DB.training.done).length;
+  return {total,done,pct:total?Math.round(done/total*100):0};
+}
+function ativacoesDeHoje(){
+  const dow=new Date().getDay();
+  return ATIVACOES.filter(a=>a.dow.includes(dow));
+}
+function renderHome(){
+  const t=statsTraining();
+  const dow=new Date().getDay();
+  const dia=CRONOGRAMA[dow];
+  const ats=ativacoesDeHoje();
+  const feitasHoje=DB.execucoes.filter(e=>e.data===todayISO()).length;
+  return `
+  <section class="card hero">
+    <div class="eyebrow">Equipe de Relacionamento</div>
+    <h2>Operação em um lugar só.</h2>
+    <p>Treinamento, procedimentos, rotina do dia e distribuição justa da fila — o padrão Sala D'Oro executável.</p>
+    <div class="kpis">
+      <div class="kpi"><div class="l">Trilha concluída</div><div class="v">${t.pct}%</div></div>
+      <div class="kpi"><div class="l">Tarefas do dia</div><div class="v">${dia.tasks.length+ats.length}</div></div>
+      <div class="kpi"><div class="l">Registros hoje</div><div class="v">${feitasHoje}</div></div>
+      <div class="kpi"><div class="l">POPs na base</div><div class="v">${POPS.length}</div></div>
+    </div>
+  </section>
+  <div class="homegrid">
+    <button class="module" onclick="setView('trilha')">
+      <span class="tag">Formação</span><strong>Treinamentos</strong>
+      <span>Trilha completa em 5 níveis, do fundamento ao relacionamento avançado. ${t.done}/${t.total} missões concluídas.</span>
+    </button>
+    <button class="module" onclick="setView('procedimentos')">
+      <span class="tag">Consulta</span><strong>Procedimentos</strong>
+      <span>O Google da operação: busque qualquer POP e receba o passo a passo oficial na hora.</span>
+    </button>
+    <button class="module" onclick="setView('tarefas')">
+      <span class="tag">Execução</span><strong>Tarefas & Atividades</strong>
+      <span>${esc(dia.title)}. Cronograma da recepção + Matriz de Ativações num painel só.</span>
+    </button>
+    <button class="module" onclick="setView('vez')">
+      <span class="tag">Distribuição</span><strong>Lista da Vez</strong>
+      <span>Rodízio justo por categoria: presença, preferência, ocupação e histórico auditável.</span>
+    </button>
+  </div>`;
+}
+
+/* ============ TREINAMENTOS ============ */
+function renderTrilha(){
+  if(missaoAberta) return renderMissao();
+  const t=statsTraining();
+  let unlocked=true;
+  return `
+  <section class="card section">
+    <h2>Trilha de formação</h2>
+    <div class="progressline"><span style="width:${t.pct}%"></span></div>
+    <div class="muted" style="font-size:.86rem">${t.done} de ${t.total} missões · complete um nível para liberar o próximo</div>
+  </section>
+  <div class="levels">
+  ${TRILHA.map((nivel,i)=>{
+    const doneCount=nivel.missoes.filter(m=>DB.training.done[m.id]).length;
+    const pct=Math.round(doneCount/nivel.missoes.length*100);
+    const thisUnlocked=unlocked;
+    if(doneCount<nivel.missoes.length) unlocked=false;
+    return `<section class="card level">
+      <div class="levelhead">
+        <strong>${esc(nivel.nome)}</strong>
+        ${pct===100?`<span class="pill good">Concluído</span>`:thisUnlocked?`<span class="pill gold">${pct}%</span>`:`<span class="pill neutral">Bloqueado</span>`}
+      </div>
+      <div class="muted" style="font-size:.86rem;margin-bottom:8px">${esc(nivel.desc)}</div>
+      <div class="progressline"><span style="width:${pct}%"></span></div>
+      <div class="missions">
+        ${nivel.missoes.map((m,j)=>{
+          const done=!!DB.training.done[m.id];
+          return `<button class="mission ${done?"done":""}" ${thisUnlocked?"":"disabled"} onclick="abrirMissao('${m.id}')">
+            <span class="mnum">${done?"✓":j+1}</span>
+            <span><strong>${esc(m.t)}</strong><small>${esc(m.resumo)}</small></span>
+            <span class="pill ${done?"good":"neutral"}">${done?"OK":"Abrir"}</span>
+          </button>`;
+        }).join("")}
+      </div>
+    </section>`;
+  }).join("")}
+  </div>`;
+}
+function findMissao(id){
+  for(const n of TRILHA){const m=n.missoes.find(x=>x.id===id);if(m)return m}
+  return null;
+}
+function abrirMissao(id){missaoAberta=id;quizEstado=null;render()}
+function renderMissao(){
+  const m=findMissao(missaoAberta);
+  if(!m){missaoAberta=null;return renderTrilha()}
+  const steps=m.steps||POPS.find(p=>p.id===m.pop)?.steps||[];
+  const done=!!DB.training.done[m.id];
+  return `<div class="missionview">
+    <section class="card section">
+      <button class="btn secondary small" onclick="missaoAberta=null;render()">← Voltar à trilha</button>
+      <h2 style="margin-top:14px">Missão</h2>
+      <div style="font-size:1.5rem;font-weight:850;letter-spacing:-.04em">${esc(m.t)}</div>
+      <p class="muted" style="line-height:1.55">${esc(m.resumo)}</p>
+    </section>
+    <section class="card section">
+      <h2>Passo a passo oficial</h2>
+      <div class="steps">
+        ${steps.map((s,i)=>`<div class="step"><b>${i+1}</b><p>${esc(s)}</p></div>`).join("")}
+      </div>
+    </section>
+    <section class="card section">
+      <h2>Decisão de campo</h2>
+      <p style="margin:0 0 12px;line-height:1.5">${esc(m.quiz.q)}</p>
+      <div class="list">
+        ${m.quiz.opts.map((o,i)=>{
+          let cls="";
+          if(quizEstado!==null){
+            if(i===m.quiz.correct)cls="correct";
+            else if(i===quizEstado)cls="wrong";
+          }
+          return `<button class="choice ${cls}" onclick="responder(${i})">${esc(o)}</button>`;
+        }).join("")}
+      </div>
+      ${quizEstado!==null?`<div class="feedback ${quizEstado===m.quiz.correct?"ok":"no"}" style="margin-top:10px">
+        <strong>${quizEstado===m.quiz.correct?"Correto.":"Ainda não."}</strong> ${esc(m.quiz.exp)}
+      </div>`:""}
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+        ${quizEstado===m.quiz.correct&&!done?`<button class="btn" onclick="concluirMissao()">Concluir missão ✓</button>`:""}
+        ${done?`<span class="pill good" style="align-self:center">Missão concluída</span>`:""}
+      </div>
+    </section>
+  </div>`;
+}
+function responder(i){quizEstado=i;render()}
+function concluirMissao(){
+  DB.training.done[missaoAberta]=nowBR();
+  save();missaoAberta=null;quizEstado=null;render();
+}
+
+/* ============ PROCEDIMENTOS (o "Google") ============ */
+function highlight(text,q){
+  if(!q)return esc(text);
+  const safe=esc(text);
+  try{
+    const re=new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi");
+    return safe.replace(re,"<mark>$1</mark>");
+  }catch{return safe}
+}
+function renderProcedimentos(){
+  const q=buscaQuery.trim().toLowerCase();
+  const hits=q?POPS.filter(p=>(p.title+" "+p.group+" "+p.steps.join(" ")).toLowerCase().includes(q)):POPS;
+  const groups=[...new Set(hits.map(p=>p.group))];
+  return `
+  <section class="card section">
+    <h2>Consulta de procedimentos</h2>
+    <div class="searchbox">
+      <input id="busca" type="search" placeholder="Busque: encaixe, espera, caixa, follow-up, aniversariante..." value="${esc(buscaQuery)}" />
+    </div>
+    <div class="muted" style="font-size:.82rem;margin-top:8px">${hits.length} procedimento(s) · fonte: POP oficial Recepção, Agenda e Relacionamento</div>
+  </section>
+  ${groups.map(g=>`
+    <section class="card section">
+      <h2>${esc(g)}</h2>
+      <div class="hits">
+        ${hits.filter(p=>p.group===g).map(p=>`
+          <details class="popcard" ${q?"open":""}>
+            <summary>${highlight(p.title,q)} <span class="pill gold">POP</span></summary>
+            <ul>${p.steps.map(s=>`<li>${highlight(s,q)}</li>`).join("")}</ul>
+          </details>`).join("")}
+      </div>
+    </section>`).join("")}`;
+}
+
+/* ============ TAREFAS & ATIVIDADES ============ */
+function renderTarefas(){
+  const dow=new Date().getDay();
+  const dia=CRONOGRAMA[dow];
+  const ats=ativacoesDeHoje();
+  const execsHoje=DB.execucoes.filter(e=>e.data===todayISO());
+  const isDone=id=>execsHoje.some(e=>e.itemId===id&&e.status==="done");
+
+  const sub =
+    subTarefas==="semana" ? `
+      <section class="card section">
+        <h2>Cronograma da semana</h2>
+        <div class="calendar">
+          ${[1,2,3,4,5,6,0].map(d=>`<div class="day ${d===dow?"today":""}">
+            <div class="name">${CRONOGRAMA[d].title.split("—")[0].trim()}</div>
+            <div class="small">${esc(CRONOGRAMA[d].title.split("—")[1]?.trim()||"")}</div>
+            <div class="small" style="margin-top:6px">${CRONOGRAMA[d].tasks.map(t=>"· "+esc(t.t)).join("<br>")}</div>
+          </div>`).join("")}
+        </div>
+      </section>` :
+    subTarefas==="matriz" ? `
+      <section class="card section">
+        <h2>Matriz de Ativações</h2>
+        <div class="list">
+          ${ATIVACOES.map(a=>`<div class="item">
+            <div class="toprow"><h4>${esc(a.nome)}</h4><span class="pill ${a.freq==="Diário"?"good":a.freq==="Semanal"?"warn":"neutral"}">${esc(a.freq)}</span></div>
+            <div class="meta"><strong>Público:</strong> ${esc(a.publico)}<br><strong>Dia:</strong> ${esc(a.dia)}<br><strong>Critério:</strong> ${esc(a.criterio)}</div>
+            <div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">Registrar execução</button></div>
+          </div>`).join("")}
+        </div>
+      </section>` :
+    subTarefas==="registros" ? `
+      <section class="card section">
+        <h2>Registros</h2>
+        <div class="list">
+          ${[...DB.execucoes].sort((a,b)=>b.ts-a.ts).slice(0,80).map(e=>`<div class="item">
+            <div class="toprow"><h4>${esc(e.titulo)}</h4>
+              <span class="pill ${e.status==="done"?"good":e.status==="partial"?"warn":"danger"}">${e.status==="done"?"Concluída":e.status==="partial"?"Parcial":"Bloqueada"}</span></div>
+            <div class="meta">${esc(e.quando)} · ${esc(e.user||"Equipe")}${e.obs?" · "+esc(e.obs):""}${e.evidencia?"<br>Evidência: "+esc(e.evidencia):""}</div>
+          </div>`).join("")||`<div class="muted">Nenhum registro ainda.</div>`}
+        </div>
+      </section>` :
+    `
+    <div class="grid2">
+      <section class="card section">
+        <h2>${esc(dia.title)}</h2>
+        <div class="list">
+          ${dia.tasks.map(t=>`<div class="item">
+            <div class="toprow"><h4>${esc(t.t)}</h4>${isDone(t.id)?`<span class="pill good">Feita</span>`:`<span class="pill warn">Pendente</span>`}</div>
+            <div class="meta">${esc(t.d)}</div>
+            <div class="btnrow"><button class="btn secondary small" onclick="registrar('${t.id}','${esc(t.t)}','rotina')">Registrar</button></div>
+          </div>`).join("")}
+        </div>
+      </section>
+      <section class="card section">
+        <h2>Ativações de hoje</h2>
+        ${ats.length?`<div class="list">
+          ${ats.map(a=>`<div class="item">
+            <div class="toprow"><h4>${esc(a.nome)}</h4>${isDone(a.id)?`<span class="pill good">Feita</span>`:`<span class="pill gold">${esc(a.freq)}</span>`}</div>
+            <div class="meta">${esc(a.publico)} — ${esc(a.criterio)}</div>
+            <div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">Registrar execução</button></div>
+          </div>`).join("")}
+        </div>`:`<div class="muted">Sem ativação fixa hoje. Consulte a matriz para ações pontuais e mensais.</div>`}
+      </section>
+    </div>`;
+
+  return `
+  <div class="subtabs">
+    ${[["hoje","Hoje"],["semana","Semana"],["matriz","Matriz de ativações"],["registros","Registros"]].map(([id,l])=>
+      `<button class="subtab ${subTarefas===id?"on":""}" onclick="subTarefas='${id}';render()">${l}</button>`).join("")}
+  </div>
+  ${sub}`;
+}
+function registrar(itemId,titulo,tipo){
+  openModal("Registrar execução",titulo,`
+    <div class="row">
+      <div><label>Status</label><select id="rStatus">
+        <option value="done">Concluída</option><option value="partial">Parcial</option><option value="blocked">Bloqueada</option>
+      </select></div>
+      <div><label>Evidência</label><input id="rEvid" placeholder="print, link, quantidade..."></div>
+    </div>
+    <div style="margin-top:10px"><label>Observação</label><textarea id="rObs" placeholder="O que foi feito, respostas, agendamentos gerados..."></textarea></div>
+  `,()=>{
+    DB.execucoes.push({
+      id:uid(),ts:Date.now(),data:todayISO(),quando:nowBR(),
+      itemId,titulo,tipo,user:DB.user,
+      status:document.getElementById("rStatus").value,
+      evidencia:document.getElementById("rEvid").value.trim(),
+      obs:document.getElementById("rObs").value.trim()
+    });
+    save();closeModal();render();
+  });
+}
+
+/* ============ LISTA DA VEZ ============ */
+function vezCat(){return DB.vez.cats.find(c=>c.id===DB.vez.catAtual)||DB.vez.cats[0]}
+function vezSt(){return DB.vez.state[vezCat().id]}
+function stLabel(s){return s==="present"?"Presente":s==="absent"?"Ausente":"Ocupada"}
+function stPill(s){return s==="present"?"good":s==="absent"?"danger":"warn"}
+function firstAvailable(){
+  const c=vezCat(),s=vezSt(),n=c.profs.length;
+  for(let i=0;i<n;i++){
+    const idx=(s.pointer+i)%n;
+    if(s.statuses[c.profs[idx]]==="present")return idx;
+  }
+  return -1;
+}
+function daVez(){const i=firstAvailable();return i>=0?vezCat().profs[i]:null}
+function ordemVisivel(){
+  const c=vezCat(),s=vezSt(),arr=[];
+  for(let i=0;i<c.profs.length;i++){
+    const idx=(s.pointer+i)%c.profs.length;
+    const n=c.profs[idx];
+    arr.push({name:n,idx,status:s.statuses[n],count:s.counts[n]||0});
+  }
+  return arr;
+}
+function vezLog(tipo,detalhe){
+  DB.vez.log.unshift({id:uid(),tipo,at:nowBR(),cat:DB.vez.catAtual,...detalhe});
+  DB.vez.log=DB.vez.log.slice(0,400);
+}
+function renderVez(){
+  const c=vezCat(),s=vezSt(),atual=daVez();
+  const catTabs=DB.vez.cats.map(cat=>{
+    const st=DB.vez.state[cat.id];
+    const pres=cat.profs.filter(n=>st.statuses[n]==="present").length;
+    return `<button class="subtab ${DB.vez.catAtual===cat.id?"on":""}" onclick="DB.vez.catAtual='${cat.id}';save();render()">${esc(cat.name)} · ${pres}</button>`;
+  }).join("");
+  const viewTabs=[["vez","Da vez"],["presenca","Presença"],["historico","Histórico"],["config","Config"]].map(([id,l])=>
+    `<button class="subtab ${vezView===id?"on":""}" onclick="vezView='${id}';render()">${l}</button>`).join("");
+
+  let body="";
+  if(vezView==="presenca"){
+    body=`<div class="grid2">
+      <section class="card section">
+        <h2>Presença — ${esc(c.name)}</h2>
+        <div class="list">
+        ${c.profs.map(n=>`<div class="item">
+          <div class="toprow"><h4>${esc(n)}</h4><span class="pill ${stPill(s.statuses[n])}">${stLabel(s.statuses[n])}</span></div>
+          <div class="btnrow">
+            <button class="btn secondary small" onclick="setStatusProf('${esc(n)}','present')">Presente</button>
+            <button class="btn secondary small" onclick="setStatusProf('${esc(n)}','absent')">Ausente</button>
+            <button class="btn secondary small" onclick="setStatusProf('${esc(n)}','occupied')">Ocupada</button>
+          </div>
+        </div>`).join("")}
+        </div>
+      </section>
+      <section class="card section">
+        <h2>Interpretação da regra</h2>
+        <div class="notice"><strong>Ausente:</strong> sai da distribuição e perde as oportunidades do período. Ao voltar, retorna à ordem estrutural e aguarda o marcador alcançá-la.</div>
+        <div class="notice"><strong>Ocupada:</strong> mantém a posição. O sistema pula temporariamente e, quando liberada, volta a ser elegível no ponto em que estiver.</div>
+        <div class="notice"><strong>Preferência:</strong> registrada, mas não consome a vez do rodízio.</div>
+      </section>
+    </div>`;
+  } else if(vezView==="historico"){
+    const items=DB.vez.log.filter(e=>e.cat===DB.vez.catAtual).slice(0,100);
+    body=`<section class="card section">
+      <h2>Histórico — ${esc(c.name)}</h2>
+      <div class="list">
+      ${items.length?items.map(e=>`<div class="item">
+        <div class="toprow"><h4>${esc(e.texto||e.tipo)}</h4><span class="muted" style="font-size:.78rem">${esc(e.at)}</span></div>
+        <div class="meta">${e.prof?"Profissional: "+esc(e.prof):""}${e.cliente?" · Cliente: "+esc(e.cliente):""}${e.servico?" · Serviço: "+esc(e.servico):""}</div>
+      </div>`).join(""):`<div class="muted">Nenhum evento nesta categoria.</div>`}
+      </div>
+    </section>`;
+  } else if(vezView==="config"){
+    body=`<div class="grid2">
+      <section class="card section">
+        <h2>Configurar — ${esc(c.name)}</h2>
+        <label>Novo profissional</label>
+        <div style="display:flex;gap:8px"><input id="novoProf" placeholder="Nome"><button class="btn small" onclick="addProf()">Adicionar</button></div>
+        <div class="list" style="margin-top:12px">
+          ${c.profs.map(n=>`<div class="item"><div class="toprow"><h4>${esc(n)}</h4>
+            <button class="btn secondary small" onclick="removeProf('${esc(n)}')">Remover</button></div></div>`).join("")}
+        </div>
+      </section>
+      <section class="card section">
+        <h2>Manutenção</h2>
+        <div class="notice">Os dados ficam salvos neste dispositivo (localStorage). Presença reseta automaticamente a cada dia; contadores e marcador são mantidos.</div>
+        <div class="btnrow" style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn secondary small" onclick="resetCategoria()">Resetar categoria</button>
+        </div>
+      </section>
+    </div>`;
+  } else {
+    const ordem=ordemVisivel();
+    body=`<div class="grid2">
+      <section>
+        <div class="notice"><strong>Regra ativa:</strong> a ordem estrutural nunca muda — o marcador gira. Ausente perde as oportunidades enquanto está fora. Ocupada preserva posição. Preferência não consome vez.</div>
+        <section class="card section">
+          <h2>${esc(c.name)} · próxima da vez</h2>
+          <div class="vezname">${atual?esc(atual):"Sem disponível"}</div>
+          <div class="muted" style="font-size:.9rem;line-height:1.5">
+            Marcador estrutural em <strong>${esc(c.profs[s.pointer]||"")}</strong>.
+            ${atual?`${esc(atual)} está elegível agora.`:"Marque presença ou libere profissionais para distribuir."}
+          </div>
+          <div class="list" style="margin-top:16px">
+            <button class="btn" ${!atual?"disabled":""} onclick="abrirAtendimento('normal')">Registrar atendimento da vez →</button>
+            <button class="btn secondary" onclick="abrirAtendimento('pref')">Registrar preferência (não consome vez) →</button>
+          </div>
+        </section>
+      </section>
+      <section class="card section">
+        <h2>Próximos no ciclo</h2>
+        ${ordem.map((p,i)=>`<div class="vrow">
+          <div class="rank ${p.name===atual?"star":""}">${p.name===atual?"★":i+1}</div>
+          <div class="grow"><div class="rname">${esc(p.name)}</div><div class="rsub">${p.count} atend. · posição fixa ${p.idx+1}</div></div>
+          <span class="pill ${stPill(p.status)}">${stLabel(p.status)}</span>
+        </div>`).join("")}
+      </section>
+    </div>`;
+  }
+
+  return `<div class="subtabs">${catTabs}</div><div class="subtabs">${viewTabs}</div>${body}`;
+}
+function setStatusProf(nome,status){
+  const s=vezSt(),prev=s.statuses[nome];
+  s.statuses[nome]=status;
+  vezLog("status",{prof:nome,texto:`${nome}: ${stLabel(prev)} → ${stLabel(status)}`});
+  save();render();
+}
+function abrirAtendimento(kind){
+  const atual=daVez();
+  const opts=vezCat().profs.map(n=>`<option value="${esc(n)}">${esc(n)} · ${stLabel(vezSt().statuses[n])}</option>`).join("");
+  openModal(
+    kind==="normal"?"Atendimento da vez":"Registrar preferência",
+    kind==="normal"?`Pela fila. Profissional sugerida: ${atual||"—"}.`:"Preferência da cliente não consome a vez do rodízio.",
+    `${kind==="pref"?`<label>Profissional de preferência</label><select id="mProf">${opts}</select><div style="height:10px"></div>`:""}
+     <div class="row">
+       <div><label>Cliente</label><input id="mCliente" placeholder="Nome da cliente"></div>
+       <div><label>Serviço</label><input id="mServico" placeholder="Corte, escova..."></div>
+     </div>`,
+    ()=>{
+      const cliente=document.getElementById("mCliente").value.trim();
+      const servico=document.getElementById("mServico").value.trim();
+      if(kind==="normal"){
+        const c=vezCat(),s=vezSt(),idx=firstAvailable();
+        if(idx>=0){
+          const nome=c.profs[idx];
+          s.counts[nome]=(s.counts[nome]||0)+1;
+          s.pointer=(idx+1)%c.profs.length;
+          vezLog("fila",{prof:nome,cliente,servico,texto:`${nome} atendeu pela fila`});
+        }
+      }else{
+        const prof=document.getElementById("mProf").value;
+        vezLog("preferencia",{prof,cliente,servico,texto:`Preferência por ${prof} — não consome vez`});
+      }
+      save();closeModal();render();
+    });
+}
+function addProf(){
+  const nome=document.getElementById("novoProf").value.trim();
+  if(!nome)return;
+  const c=vezCat();
+  if(c.profs.includes(nome))return alert("Já existe nesta categoria.");
+  c.profs.push(nome);
+  vezSt().statuses[nome]="present";vezSt().counts[nome]=0;
+  vezLog("add",{prof:nome,texto:`${nome} adicionada em ${c.name}`});
+  save();render();
+}
+function removeProf(nome){
+  if(!confirm(`Remover ${nome}?`))return;
+  const c=vezCat(),s=vezSt();
+  c.profs=c.profs.filter(n=>n!==nome);
+  delete s.statuses[nome];delete s.counts[nome];
+  if(s.pointer>=c.profs.length)s.pointer=0;
+  vezLog("remove",{prof:nome,texto:`${nome} removida de ${c.name}`});
+  save();render();
+}
+function resetCategoria(){
+  if(!confirm("Resetar presença, contadores e marcador desta categoria?"))return;
+  const c=vezCat();
+  DB.vez.state[c.id]={pointer:0,day:todayBR(),
+    statuses:Object.fromEntries(c.profs.map(n=>[n,"present"])),
+    counts:Object.fromEntries(c.profs.map(n=>[n,0]))};
+  vezLog("reset",{texto:`Categoria ${c.name} resetada`});
+  save();render();
+}
+
+/* ============ MODAL ============ */
+function openModal(title,text,bodyHTML,onConfirm){
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalText").textContent=text;
+  document.getElementById("modalBody").innerHTML=bodyHTML;
+  document.getElementById("modalConfirm").onclick=onConfirm;
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+
+/* ============ PÓS-RENDER ============ */
+function afterRender(){
+  const busca=document.getElementById("busca");
+  if(busca){
+    busca.addEventListener("input",()=>{
+      buscaQuery=busca.value;
+      const pos=busca.selectionStart;
+      render();
+      const b2=document.getElementById("busca");
+      if(b2){b2.focus();b2.setSelectionRange(pos,pos)}
+    });
+  }
+}
+render();
+</script>
+</body>
+</html>
