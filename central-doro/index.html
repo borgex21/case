@@ -19,6 +19,8 @@
   --accent:#0d9488;
   --accent-2:#38bdf8;
   --accent-ink:#0f766e;
+  --champagne:#D4AF8C;
+  --gold:#C9A84C;
   --good:#22c55e;
   --warn:#f59e0b;
   --danger:#fb7185;
@@ -32,6 +34,7 @@ body{
   margin:0;color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,ui-sans-serif,sans-serif;
   background:
+    radial-gradient(circle at 15% 15%, rgba(212,175,140,.06), transparent 45%),
     radial-gradient(circle at 12% 8%, rgba(45,212,191,.20), transparent 40%),
     radial-gradient(circle at 88% 6%, rgba(196,181,253,.22), transparent 42%),
     radial-gradient(circle at 25% 92%, rgba(125,211,252,.18), transparent 46%),
@@ -51,7 +54,8 @@ button{cursor:pointer}
   border-bottom:1px solid var(--line);
 }
 .brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-ink);font-weight:800}
+.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-ink);font-weight:800;background:linear-gradient(90deg, var(--accent-ink), var(--champagne), var(--accent-ink));background-size:200% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{background-position:100% center}50%{background-position:0% center}}
 .brandrow h1{margin:2px 0 0;font-size:22px;letter-spacing:-.04em}
 .brandrow .who{color:var(--muted);font-size:12px;text-align:right}
 .nav{display:flex;gap:8px;overflow:auto;margin-top:12px;scrollbar-width:none}
@@ -226,7 +230,7 @@ mark{background:rgba(45,212,191,.32);color:inherit;border-radius:3px;padding:0 2
 .spotlight{
   padding:22px;border-radius:26px;text-align:left;width:100%;
   background:linear-gradient(155deg,rgba(13,148,136,.94),rgba(8,145,178,.9));
-  color:#eafffb;border:1px solid rgba(255,255,255,.25);box-shadow:0 26px 60px rgba(13,148,136,.32), inset 0 1px rgba(255,255,255,.3);
+  color:#eafffb;border:1px solid rgba(255,255,255,.25);box-shadow:0 26px 60px rgba(13,148,136,.32), 0 0 40px rgba(212,175,140,.22), inset 0 1px rgba(255,255,255,.3);
   position:relative;overflow:hidden;
 }
 .spotlight:before{content:"";position:absolute;inset:auto -30% -60% auto;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 70%)}
@@ -1094,7 +1098,7 @@ function renderPainel(){
           <circle class="ring-fill" cx="60" cy="60" r="52" stroke="url(#ringGrad)"
             stroke-dasharray="${circ}" stroke-dashoffset="${dashoff}"/>
           <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#38bdf8"/>
+            <stop offset="0%" stop-color="#2dd4bf"/><stop offset="50%" stop-color="#D4AF8C"/><stop offset="100%" stop-color="#38bdf8"/>
           </linearGradient></defs>
         </svg>
         <div class="dayring-label"><strong class="mono">${pctDia}%</strong><span>hoje</span></div>
