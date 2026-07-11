@@ -314,7 +314,7 @@ mark{background:rgba(45,212,191,.32);color:inherit;border-radius:3px;padding:0 2
     <div class="brandrow">
       <div>
         <div class="kicker">Central D'Oro · Sala D'Oro</div>
-        <h1 id="viewTitle">Aprender</h1>
+        <h1 id="viewTitle">Treinamentos</h1>
       </div>
       <div class="who" id="whoBox">Equipe de Relacionamento</div>
     </div>
@@ -880,7 +880,7 @@ function normalizeVez(){
 
 /* ============ NAVEGAÇÃO ============ */
 const VIEWS=[
-  ["aprender","Aprender"],["procedimentos","Procedimentos"],
+  ["aprender","Treinamentos"],["procedimentos","Procedimentos"],
   ["painel","Painel"],["vez","Lista da Vez"]
 ];
 let missaoAberta=null;
@@ -901,7 +901,7 @@ function render(){
   const nav=VIEWS.map(([id,l])=>`<button class="navbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
   document.getElementById("mainNav").innerHTML=nav;
   document.getElementById("footNav").innerHTML=VIEWS.map(([id,l])=>`<button class="footbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
-  document.getElementById("viewTitle").textContent=VIEWS.find(v=>v[0]===DB.view)?.[1]||"Aprender";
+  document.getElementById("viewTitle").textContent=VIEWS.find(v=>v[0]===DB.view)?.[1]||"Treinamentos";
   document.getElementById("whoBox").textContent=DB.user||"Equipe de Relacionamento";
   const main=document.getElementById("main");
   main.innerHTML =
