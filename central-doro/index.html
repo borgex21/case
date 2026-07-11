@@ -1321,10 +1321,18 @@ function vezLog(tipo,detalhe){
   DB.vez.log.unshift({id:uid(),tipo,at:nowBR(),cat:DB.vez.catAtual,fila:vezFila,...detalhe});
   DB.vez.log=DB.vez.log.slice(0,400);
 }
-function passarVez(){
+function marcarOcupado(){
   const nome=daVez();
   if(!nome)return;
   setStatusProf(nome,"occupied");
+}
+function passarVez(){
+  const c=vezCat(),s=vezSt(),idx=firstAvailable();
+  if(idx<0)return;
+  const nome=c.profs[idx];
+  s.pointer=(idx+1)%c.profs.length;
+  vezLog("pular",{prof:nome,texto:`${nome} passou a vez, marcador avançou sem registrar atendimento`});
+  save();render();
 }
 function renderVez(){
   const c=vezCat(),s=vezSt(),atual=daVez();
@@ -1404,7 +1412,8 @@ function renderVez(){
           </div>
           <div class="list" style="margin-top:16px">
             <button class="btn" ${!atual?"disabled":""} onclick="abrirAtendimento()">Registrar atendimento da vez →</button>
-            <button class="btn secondary" ${!atual?"disabled":""} onclick="passarVez()">Ocupado, passar a vez →</button>
+            <button class="btn secondary" ${!atual?"disabled":""} onclick="marcarOcupado()">Marcar ocupado (mantém posição)</button>
+            <button class="btn secondary" ${!atual?"disabled":""} onclick="passarVez()">Passar a vez (avança o marcador)</button>
           </div>
         </section>
       </section>
