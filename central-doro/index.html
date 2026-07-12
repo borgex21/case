@@ -63,6 +63,11 @@ button{cursor:pointer}
   border:1px solid rgba(13,148,136,.22);
   color:var(--accent-ink);font-size:12.5px;font-weight:850;letter-spacing:.02em;text-align:right;white-space:nowrap;
 }
+.logoutbtn{
+  background:none;border:none;color:var(--accent-ink);font-size:16px;cursor:pointer;padding:0;opacity:.6;
+  transition:opacity .2s;
+}
+.logoutbtn:hover{opacity:1}
 .nav{display:flex;gap:8px;overflow:auto;margin-top:12px;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .navbtn{
@@ -210,9 +215,10 @@ mark{background:rgba(45,212,191,.32);color:inherit;border-radius:3px;padding:0 2
   padding:13px;border-radius:16px;border:1px solid rgba(13,148,136,.22);
   background:rgba(13,148,136,.07);color:var(--accent-ink);font-size:.86rem;line-height:1.5;margin-bottom:12px;
 }
-.modal{position:fixed;inset:0;background:rgba(11,31,34,.35);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:14px}
+.modal{position:fixed;inset:0;background:rgba(11,31,34,.35);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
 .modal.open{display:flex}
-.sheet{width:100%;max-width:540px;background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border:1px solid var(--glass-edge);border-radius:26px 26px 18px 18px;padding:20px;box-shadow:var(--shadow)}
+#loginModal{align-items:center !important;justify-content:center !important}
+.sheet{width:100%;max-width:540px;background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border:1px solid var(--glass-edge);border-radius:26px;padding:20px;box-shadow:var(--shadow)}
 .sheet h3{margin:0 0 4px;font-size:1.2rem;letter-spacing:-.03em}
 .sheet p{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 14px}
 .footbar{
@@ -338,6 +344,19 @@ mark{background:rgba(45,212,191,.32);color:inherit;border-radius:3px;padding:0 2
       <button class="btn secondary small" onclick="closeModal()">Cancelar</button>
       <button class="btn small" id="modalConfirm">Confirmar</button>
     </div>
+  </div>
+</div>
+
+<div class="modal" id="loginModal" style="display:none" onclick="if(event.target.id==='loginModal')return">
+  <div class="sheet" style="max-width:320px">
+    <h3>Acesso Restrito</h3>
+    <p style="color:var(--muted);font-size:.9rem">Digite seu nome e senha para acessar</p>
+    <div style="display:grid;gap:10px;margin:16px 0">
+      <input type="text" id="loginName" placeholder="Seu nome" style="padding:10px;border:1px solid var(--line);border-radius:10px;font-family:inherit">
+      <input type="password" id="loginPass" placeholder="Senha" style="padding:10px;border:1px solid var(--line);border-radius:10px;font-family:inherit" onkeypress="if(event.key==='Enter')loginUser()">
+    </div>
+    <button class="btn" style="width:100%" onclick="loginUser()">Entrar</button>
+    <div id="loginError" style="color:var(--danger);font-size:.85rem;margin-top:10px;text-align:center;display:none"></div>
   </div>
 </div>
 
@@ -812,6 +831,47 @@ const TRILHA = [
       quiz:{q:"Uma cliente quis agendar mas não havia horário disponível. Ela não insistiu depois. Isso entra no reporte semanal?", opts:["Só entra se ela insistir mais de uma vez, mostrando interesse real","Sim, entra como perda por indisponibilidade, com o motivo registrado para análise da gerência","Não entra, porque sem agendamento fechado não há o que reportar"], correct:1, exp:"A perda por indisponibilidade é dado de gestão independente de insistência da cliente: mostra demanda reprimida e orienta ajustes de agenda."}}]}
 ];
 
+/* ============ AUTENTICAÇÃO ============ */
+const TEAM_MEMBERS = {
+  "Alan":"alan2026","Amorim":"amorim2026","Cidinha":"cidinha2026","Claudinha":"claudinha2026",
+  "Cley":"cley2026","Colli":"colli2026","Dani":"dani2026","Enrique":"enrique2026",
+  "Guilherme":"guilherme2026","Henrique":"henrique2026","Iara":"iara2026","Jeová":"jeova2026",
+  "Marcelo":"marcelo2026","Netto":"netto2026","Taina":"taina2026",
+  "Andressa":"andressa2026","Day":"day2026","Elza":"elza2026","Elizangela":"elizangela2026",
+  "Andrea":"andrea2026","Fátima Barbosa":"fatima.barbosa2026","Fátima Mota":"fatima.mota2026",
+  "Maria":"maria2026","Selma":"selma2026","Sheila":"sheila2026",
+  "Apollo":"apollo2026","Marta":"marta2026","Lays":"lays2026",
+  "Fran":"fran2026","Kassio":"kassio2026"
+};
+function loginUser(){
+  const name=document.getElementById("loginName").value.trim();
+  const pass=document.getElementById("loginPass").value;
+  const errDiv=document.getElementById("loginError");
+  if(!TEAM_MEMBERS[name]){
+    errDiv.textContent="Nome não encontrado";
+    errDiv.style.display="block";
+    return;
+  }
+  if(TEAM_MEMBERS[name]!==pass){
+    errDiv.textContent="Senha incorreta";
+    errDiv.style.display="block";
+    return;
+  }
+  DB.user=name;
+  save();
+  document.getElementById("loginModal").style.display="none";
+  render();
+}
+function logout(){
+  if(!confirm("Sair da conta?"))return;
+  DB.user="";
+  save();
+  document.getElementById("loginModal").style.display="flex";
+  document.getElementById("loginName").value="";
+  document.getElementById("loginPass").value="";
+  document.getElementById("loginError").style.display="none";
+}
+
 /* Lista da vez: categorias e regras do Motor de Distribuição (equipe real, unidade Alphaville) */
 const VEZ_DEFAULT_CATS = [
   {id:"cab", name:"Cabeleireiros", profs:["Alan","Amorim","Cidinha","Claudinha","Cley","Colli","Dani","Enrique","Guilherme","Henrique","Iara","Jeová","Marcelo","Netto","Taina"]},
@@ -897,12 +957,19 @@ function setView(v){DB.view=v;missaoAberta=null;quizEstado=null;save();render()}
 
 /* ============ RENDER GERAL ============ */
 function render(){
+  if(!DB.user){
+    document.getElementById("loginModal").style.display="flex";
+    return;
+  }
+  document.getElementById("loginModal").style.display="none";
   normalizeVez();
   const nav=VIEWS.map(([id,l])=>`<button class="navbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
   document.getElementById("mainNav").innerHTML=nav;
   document.getElementById("footNav").innerHTML=VIEWS.map(([id,l])=>`<button class="footbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
   document.getElementById("viewTitle").textContent=VIEWS.find(v=>v[0]===DB.view)?.[1]||"Treinamentos";
-  document.getElementById("whoBox").textContent=DB.user||"Equipe de Relacionamento";
+  document.getElementById("whoBox").innerHTML=DB.user
+    ? `<span>${esc(DB.user)}</span><button class="logoutbtn" onclick="logout()" title="Sair">✕</button>`
+    : "Equipe de Relacionamento";
   const main=document.getElementById("main");
   main.innerHTML =
     DB.view==="procedimentos" ? renderProcedimentos() :
