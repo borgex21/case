@@ -806,9 +806,9 @@ const TRILHA = [
     {id:"m4", t:"Cadastro de cliente", pop:"cadastro", resumo:"Nome, telefone, aniversário, origem. Cadastro incompleto é ativação perdida.",
       quiz:{q:"Por que é importante registrar a origem da cliente (indicação, tráfego pago, Instagram, retorno espontâneo)?", opts:["É dado estatístico interessante, mas não influencia nenhuma rotina do dia a dia","Alimenta a Matriz de Ativações e mostra qual canal de aquisição merece mais investimento","Serve apenas para a nota fiscal, quando a cliente solicitar CPF"], correct:1, exp:"Origem não é estatística solta: alimenta ativações específicas por canal e orienta onde investir esforço."}},
     {id:"m5", t:"Agendamento", pop:"agendamento", resumo:"Histórico, preferência, disponibilidade, confirmação. Sem preferência → lista da vez.",
-      quiz:{q:"Cliente nova liga sem profissional de preferência. Um profissional está com a agenda visivelmente mais vazia hoje. Como decidir quem atende?", opts:["Direcionar para quem está com a agenda mais vazia, otimizando a ocupação do dia","Usar a lista da vez de forma discreta, justa e registrada, independente da ocupação de cada um","Perguntar à cliente se ela tem preferência por personalidade, já que é a primeira vez dela"], correct:1, exp:"Ocupação da agenda não é critério de distribuição. A lista da vez existe para não depender de conveniência operacional."}},
+      quiz:{q:"Uma cliente que retorna pela primeira vez liga sem preferência de profissional. Dois profissionais têm o mesmo horário disponível: um com agenda vazia e outro que acabou de terminar um atendimento. Qual critério prevalece para decisão?", opts:["O profissional com agenda mais vazia, para otimizar distribuição operacional","O profissional que acabou de terminar, já que está mentalmente fresco","A lista da vez, que garante justiça independente de ocupação ou contexto"], correct:2, exp:"A lista da vez não leva em conta ocupação, cansaço ou contexto. Ela existe justamente para remover decisões subjetivas e garantir que cada profissional recebe sua vez na ordem, sem exceções."}},
     {id:"m6", t:"Telefone e WhatsApp", pop:"telefone", resumo:"Saudação padrão, entender antes de ofertar, sequência de conversão D0–D7.",
-      quiz:{q:"Uma conversa de WhatsApp está sem resposta há 3 dias. A cliente pareceu bem interessada no primeiro contato. Qual a conduta correta?", opts:["Ligar imediatamente por telefone, já que ela demonstrou interesse real","Seguir a régua D0, D1, D3, D5 e D7, respeitando a etapa correspondente ao tempo decorrido","Aguardar mais alguns dias antes de qualquer novo contato, para não parecer insistente"], correct:1, exp:"Interesse inicial não muda a régua. Pular etapas ou esperar demais quebra o método: cada etapa tem uma abordagem específica."}}]},
+      quiz:{q:"Uma cliente recebeu a proposta completa por WhatsApp, reagiu com 👍, mas sumiu da conversa por 3 dias. Você sabe que ela tem agenda apertada e trabalha o dia inteiro. Qual é a abordagem correta?", opts:["Ligar imediatamente, já que o 👍 mostra interesse confirmado e o silêncio pode indicar mudança de ideia","Enviar outro WhatsApp em tom mais casual para 'avivar' a conversa antes de ligar","Seguir a régua D0, D1, D3, D5 e D7, respeitando a etapa e não pulando para ligação por interpretação de contexto"], correct:2, exp:"Reagir 👍 não libera pulo de etapas. Contexto do dia ocupado também não. A régua é fixa: cada etapa tem timing e abordagem definida, sem improviso baseado em interpretação."}}]},
   {id:"n3", nome:"Nível 3 · Experiência da Cliente", desc:"Do primeiro sorriso à espera bem gerida.", missoes:[
     {id:"m7", t:"Primeiro contato no salão", pop:"primeirocontato", resumo:"Sorriso, nome, água/café/Wi-Fi, acompanhamento até o profissional.",
       quiz:{q:"A cliente chegou no horário, mas o profissional ainda está finalizando outro atendimento e ela parece impaciente. O que fazer?", opts:["Sugerir gentilmente remarcar para um horário sem risco de atraso","Acomodar a cliente, oferecer água, café ou Wi-Fi e zelar por ela durante a espera","Explicar a demora e pedir que aguarde em pé próximo à recepção, já que deve ser rápido"], correct:1, exp:"Zelar pela cliente durante a espera é a resposta correta, não remarcar por impaciência nem deixá-la sem acomodação."}},
@@ -820,7 +820,7 @@ const TRILHA = [
     {id:"m10", t:"Revenda de produtos", pop:"revenda", resumo:"Indicação do profissional primeiro; sem indicação, necessidade antes de sugestão.",
       quiz:{q:"Antes de sugerir qualquer produto na revenda, qual deve ser o primeiro passo?", opts:["Entender a necessidade da cliente, já que é a base de qualquer boa venda","Perguntar se algum produto foi indicado pelo profissional que atendeu","Apresentar o produto de maior ticket, para maximizar a venda"], correct:1, exp:"A indicação do profissional tem prioridade sobre a investigação de necessidade feita pela recepção: ela já vem de quem acompanhou o atendimento."}},
     {id:"m11", t:"Cobrança e fechamento", pop:"cobranca", resumo:"Confirmar serviços, perguntar se ficou feliz ANTES de cobrar, nunca sair sem pagamento validado.",
-      quiz:{q:"Na hora de fechar a comanda, a cliente demonstra insatisfação sutil com o resultado. O que fazer?", opts:["Oferecer refazer parte do serviço imediatamente, para resolver sem envolver a gerência","Não concluir a cobrança sem acionar a gerência, mesmo que a insatisfação pareça pequena","Concluir a cobrança normalmente e sugerir que ela retorne outro dia para ajustes"], correct:1, exp:"Qualquer sinal de insatisfação, mesmo sutil, trava a cobrança até a gerência avaliar. Resolver por conta própria ou seguir em frente arrisca perder a última chance de reverter a experiência."}},
+      quiz:{q:"A cliente está no caixa para pagar. Você percebe uma leve enrugada na testa quando olha para o cabelo/resultado, mas ela não verbaliza qualquer reclamação. Como proceder?", opts:["Perguntar diretamente se ficou insatisfeita e oferecer refazer se necessário, mostrando proatividade","Confiar na falta de verbalização e concluir a cobrança normalmente, evitando sugerir problemas que ela talvez não tenha percebido","Travar a cobrança e informar à gerência sobre a expressão observada, mesmo sem confir mação verbal da cliente"], correct:2, exp:"A comunicação não-verbal é dado. Uma enrugada na testa pode ser o último sinal antes da cliente sair decepcionada. Travar e chamar a gerência preserva a venda e a relação, sem depender de ela verbalizar o problema."}},
     {id:"m12", t:"Fechamento de caixa", pop:"caixa", resumo:"Conferir formas de pagamento, comparar comprovantes × sistema, reportar divergências.",
       quiz:{q:"Os comprovantes físicos não batem com o sistema no fechamento de caixa. Qual a atitude correta?", opts:["Recontar tudo sozinho até achar o erro, comunicando a gerência só se não conseguir resolver","Comunicar a divergência para a gerência imediatamente, mesmo antes de entender a causa completa","Ajustar o valor no sistema para bater com o físico e registrar a diferença como ajuste de caixa"], correct:1, exp:"A comunicação imediata não depende de já ter a causa raiz identificada. Investigar sozinho antes de avisar atrasa a resposta da gerência."}}]},
   {id:"n5", nome:"Nível 5 · Relacionamento Avançado", desc:"A máquina de ativação: sequência de conversão, funil e recuperação de agenda.", missoes:[
@@ -949,6 +949,17 @@ const VIEWS=[
 ];
 let missaoAberta=null;
 let quizEstado=null;
+let quizOpcoesMapeadas=null; // { original: shuffled }
+function embaralharOpcoes(quiz){
+  const indices=[0,1,2].sort(()=>Math.random()-.5);
+  quizOpcoesMapeadas={};
+  const optsEmbaralhadas=[];
+  indices.forEach((origIdx,newIdx)=>{
+    quizOpcoesMapeadas[newIdx]=origIdx;
+    optsEmbaralhadas.push(quiz.opts[origIdx]);
+  });
+  return {opts:optsEmbaralhadas,correctIdx:indices.indexOf(quiz.correct)};
+}
 let setorAprender="recepcao";
 let subAprender="videos";
 let subTarefas="hoje";
@@ -1109,9 +1120,37 @@ function renderMissao(){
   if(!m){missaoAberta=null;return renderTrilha()}
   const steps=m.steps||POPS.find(p=>p.id===m.pop)?.steps||[];
   const done=!!DB.training.done[m.id];
+
+  // Embaralhar opções na primeira renderização da missão
+  let embaralhado;
+  if(!quizOpcoesMapeadas){
+    embaralhado=embaralharOpcoes(m.quiz);
+  }else{
+    embaralhado={opts:m.quiz.opts.map((o,i)=>{
+      const orig=Object.values(quizOpcoesMapeadas).indexOf(i);
+      return m.quiz.opts[i];
+    }).sort((a,b)=>m.quiz.opts.indexOf(a)-m.quiz.opts.indexOf(b)).map((o,i)=>{
+      const origIdx=Object.entries(quizOpcoesMapeadas).find(([_,o2])=>o2===m.quiz.opts.indexOf(o))?.[0];
+      return m.quiz.opts[origIdx];
+    }),correctIdx:Object.entries(quizOpcoesMapeadas).find(([_,o])=>o===m.quiz.correct)?.[0]};
+  }
+
+  // Simplificar: recalcular se não temos
+  if(!quizOpcoesMapeadas){
+    embaralhado=embaralharOpcoes(m.quiz);
+  }
+
+  const optsEmbaralhadas=embaralhado.opts;
+  const correctIdxEmbaralhado=embaralhado.correctIdx;
+
+  // Encontrar próxima missão
+  const nivelAtual=TRILHA.find(n=>n.missoes.some(m2=>m2.id===missaoAberta));
+  const idxMissaoAtual=nivelAtual.missoes.findIndex(m2=>m2.id===missaoAberta);
+  const proximaMissao=idxMissaoAtual<nivelAtual.missoes.length-1?nivelAtual.missoes[idxMissaoAtual+1]:null;
+
   return `<div class="missionview">
     <section class="card section">
-      <button class="btn secondary small" onclick="missaoAberta=null;render()">← Voltar à trilha</button>
+      <button class="btn secondary small" onclick="missaoAberta=null;quizOpcoesMapeadas=null;render()">← Voltar à trilha</button>
       <span class="sectionkick" style="margin-top:14px">Missão</span>
       <div style="font-size:2.1rem;font-weight:900;letter-spacing:-.045em;line-height:1.08">${esc(m.t)}</div>
       <p class="muted" style="line-height:1.5;font-size:.86rem;margin-top:6px">${esc(m.resumo)}</p>
@@ -1128,20 +1167,22 @@ function renderMissao(){
       <h2 style="margin-top:0">Decisão de campo</h2>
       <p style="margin:0 0 12px;line-height:1.5">${esc(m.quiz.q)}</p>
       <div class="list">
-        ${m.quiz.opts.map((o,i)=>{
+        ${optsEmbaralhadas.map((o,i)=>{
           let cls="";
           if(quizEstado!==null){
-            if(i===m.quiz.correct)cls="correct";
+            if(i===correctIdxEmbaralhado)cls="correct";
             else if(i===quizEstado)cls="wrong";
           }
           return `<button class="choice ${cls}" onclick="responder(${i})">${esc(o)}</button>`;
         }).join("")}
       </div>
-      ${quizEstado!==null?`<div class="feedback ${quizEstado===m.quiz.correct?"ok":"no"}" style="margin-top:10px">
-        <strong>${quizEstado===m.quiz.correct?"Correto.":"Ainda não."}</strong> ${esc(m.quiz.exp)}
+      ${quizEstado!==null?`<div class="feedback ${quizEstado===correctIdxEmbaralhado?"ok":"no"}" style="margin-top:10px">
+        <strong>${quizEstado===correctIdxEmbaralhado?"Correto.":"Ainda não."}</strong> ${esc(m.quiz.exp)}
       </div>`:""}
       <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-        ${quizEstado===m.quiz.correct&&!done?`<button class="btn" onclick="concluirMissao()">Concluir missão ✓</button>`:""}
+        ${quizEstado===correctIdxEmbaralhado&&!done?`<button class="btn" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff" onclick="irProximaMissao('${proximaMissao?.id||""}')">
+          ${proximaMissao?`Próxima missão →`:`✓ Completar nível`}
+        </button>`:""}
         ${done?`<span class="pill good" style="align-self:center">Missão concluída</span>`:""}
       </div>
     </section>
@@ -1150,7 +1191,15 @@ function renderMissao(){
 function responder(i){quizEstado=i;render()}
 function concluirMissao(){
   DB.training.done[missaoAberta]=nowBR();
-  save();missaoAberta=null;quizEstado=null;render();
+  save();missaoAberta=null;quizEstado=null;quizOpcoesMapeadas=null;render();
+}
+function irProximaMissao(proximaMissaoId){
+  DB.training.done[missaoAberta]=nowBR();
+  save();
+  missaoAberta=proximaMissaoId||null;
+  quizEstado=null;
+  quizOpcoesMapeadas=null;
+  render();
 }
 
 /* ============ PROCEDIMENTOS (o "Google") ============ */
