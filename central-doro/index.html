@@ -1027,7 +1027,7 @@ function renderAprender(){
   if(missaoAberta) return renderMissao();
   const tabs=[["videos","📹 Vídeos de aprendizado"],["trilha","🎯 Sua trilha de formação"]];
   const body = subAprender==="trilha" ? renderTrilha() : renderVideos();
-  return `${setorPicker}
+  return `
   <div class="subtabs" style="margin-bottom:16px;border-bottom:2px solid rgba(13,148,136,.08);padding-bottom:14px">
     ${tabs.map(([id,l])=>`<button class="subtab ${subAprender===id?"on":""}" onclick="subAprender='${id}';render()" style="font-weight:700">${l}</button>`).join("")}
   </div>
