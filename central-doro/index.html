@@ -81,6 +81,22 @@ button{cursor:pointer}
 .section h2{margin:0 0 12px;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
 .muted{color:var(--muted)}
+/* Seções de painel com separação clara */
+.panel-section{
+  display:grid;gap:16px;margin-bottom:28px;padding:24px;
+  background:rgba(255,255,255,.35);border:1px solid var(--glass-edge);
+  border-radius:24px;backdrop-filter:blur(20px);
+}
+.panel-section h2{
+  margin:0 0 14px;font-size:1.15rem;letter-spacing:-.02em;font-weight:850;
+  color:var(--accent-ink);text-transform:none;
+}
+.panel-section .tag{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 12px;
+  border-radius:999px;background:rgba(13,148,136,.12);
+  color:var(--accent-ink);font-size:.65rem;font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:8px;
+}
 .eyebrow{
   display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;
   font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);
@@ -848,7 +864,7 @@ function load(){
     if(raw) return JSON.parse(raw);
   }catch{}
   return {
-    user:"", view:"aprender",
+    user:"", view:"painel",
     training:{done:{}},
     execucoes:[],           // registros de tarefas/ativações
     vez:{cats:structuredClone(VEZ_DEFAULT_CATS), state:freshVezState(), catAtual:"cab", log:[]}
@@ -880,8 +896,10 @@ function normalizeVez(){
 
 /* ============ NAVEGAÇÃO ============ */
 const VIEWS=[
-  ["aprender","Treinamentos"],["procedimentos","Procedimentos"],
-  ["painel","Painel"],["vez","Lista da Vez"]
+  ["painel","📋 Painel"],
+  ["aprender","🎓 Treinamentos"],
+  ["procedimentos","🔍 Google dos Procedimentos"],
+  ["vez","📍 Lista da Vez"]
 ];
 let missaoAberta=null;
 let quizEstado=null;
@@ -994,7 +1012,7 @@ function renderTrilha(){
   let unlocked=true;
   return `
   <section class="card section">
-    <h2>Trilha de formação</h2>
+    <h2>🎓 Sua Trilha de Formação</h2>
     <div class="progressline"><span style="width:${t.pct}%"></span></div>
     <div class="muted" style="font-size:.86rem"><span class="mono">${t.done}/${t.total}</span> missões · complete um nível para liberar o próximo</div>
   </section>
@@ -1005,21 +1023,27 @@ function renderTrilha(){
     const thisUnlocked=unlocked;
     const isCurrent=thisUnlocked&&pct<100;
     if(doneCount<nivel.missoes.length) unlocked=false;
-    return `<section class="card level ${isCurrent?"current":""} ${thisUnlocked?"":"locked"}">
+    const levelNum=i+1;
+    return `<section class="card level ${isCurrent?"current":""} ${thisUnlocked?"":"locked"}" style="border-left:6px solid ${thisUnlocked?"var(--accent)":"var(--muted)"}">
       <div class="levelhead">
-        <strong>${esc(nivel.nome)}</strong>
-        ${pct===100?`<span class="pill good">Concluído</span>`:thisUnlocked?`<span class="pill gold mono">${pct}%</span>`:`<span class="pill neutral">🔒 Bloqueado</span>`}
+        <div style="display:flex;align-items:center;gap:12px;flex:1">
+          <div style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:${thisUnlocked?"linear-gradient(135deg,var(--accent),var(--accent-2))":"rgba(13,50,55,.07)"};color:${thisUnlocked?"#fff":"var(--muted)"}; font-weight:900;font-size:1.2rem">${levelNum}</div>
+          <div>
+            <strong style="font-size:1.05rem;letter-spacing:-.02em">${esc(nivel.nome)}</strong>
+            <div class="muted" style="font-size:.8rem;margin-top:2px">${esc(nivel.desc)}</div>
+          </div>
+        </div>
+        ${pct===100?`<span class="pill good">✓ Concluído</span>`:thisUnlocked?`<span class="pill gold mono">${pct}%</span>`:`<span class="pill neutral">🔒 Bloqueado</span>`}
       </div>
-      <div class="muted" style="font-size:.86rem;margin-bottom:4px">${esc(nivel.desc)}</div>
-      ${isCurrent?`<div class="unlockbadge">▸ Nível em andamento, conclua para liberar o próximo</div>`:pct===100&&i<TRILHA.length-1?`<div class="unlockbadge">✓ Próximo nível liberado</div>`:""}
-      <div class="progressline" style="margin-top:8px"><span style="width:${pct}%"></span></div>
-      <div class="missions">
+      ${isCurrent?`<div class="unlockbadge" style="margin-top:12px">▸ Você está aqui · conclua para liberar o próximo</div>`:pct===100&&i<TRILHA.length-1?`<div class="unlockbadge" style="margin-top:12px">✓ Próximo nível desbloqueado</div>`:""}
+      <div class="progressline" style="margin-top:12px"><span style="width:${pct}%"></span></div>
+      <div class="missions" style="margin-top:14px">
         ${nivel.missoes.map((m,j)=>{
           const done=!!DB.training.done[m.id];
-          return `<button class="mission ${done?"done":""}" ${thisUnlocked?"":"disabled"} onclick="abrirMissao('${m.id}')">
+          return `<button class="mission ${done?"done":""}" ${thisUnlocked?"":"disabled"} onclick="abrirMissao('${m.id}')" style="border-left:3px solid ${done?"var(--good)":thisUnlocked?"var(--accent-2)":"var(--muted)"}">
             <span class="mnum">${done?"✓":j+1}</span>
             <span><strong>${esc(m.t)}</strong><small>${esc(m.resumo)}</small></span>
-            <span class="pill ${done?"good":"neutral"}">${done?"OK":"Abrir"}</span>
+            <span class="pill ${done?"good":"neutral"}">${done?"✓ OK":"→ Abrir"}</span>
           </button>`;
         }).join("")}
       </div>
@@ -1179,7 +1203,7 @@ function renderPainel(){
         <span class="sectionkick">Rotina do dia</span>
         <strong>${dia?esc(dia.dia)+": "+esc(dia.foco):"Domingo, salão fechado"}</strong>
         ${dia?`<span class="mono">${feitos}/${hojeItens.length} itens registrados</span>`:""}
-        <span>Rotina é o checklist fixo do dia. Ativações são o contato com clientes, mostrado à parte.</span>
+        <span>Rotina é o checklist fixo. Ativações são contato com clientes.</span>
       </div>
     </div>
   </section>`;
@@ -1187,7 +1211,7 @@ function renderPainel(){
   const sub =
     subTarefas==="semana" ? `
       <section class="card section">
-        <h2>Cronograma da semana</h2>
+        <h2>📅 Cronograma da semana</h2>
         <div class="notice"><strong>${esc(SALTO_APRESENTACAO)}</strong></div>
         <div class="calendar">
           ${[1,2,3,4,5,6].map(d=>{const cd=CRONOGRAMA[d];return `<div class="day ${d===dow?"today":""}">
@@ -1203,71 +1227,75 @@ function renderPainel(){
       </section>` :
     subTarefas==="matriz" ? `
       <section class="card section">
-        <h2>Matriz de Ativações</h2>
+        <h2>📊 Matriz de Ativações</h2>
         <div class="list">
           ${ATIVACOES.map(a=>{
             const liberado=nivelCompleto(ATIVACAO_NIVEL);
             return `<div class="item ${liberado?"":"locked"}">
               <div class="toprow"><h4>${esc(a.nome)}</h4><span class="pill ${a.freq==="Diário"?"good":a.freq==="Semanal"?"warn":"neutral"}">${esc(a.freq)}</span></div>
               <div class="meta"><strong>Público:</strong> ${esc(a.publico)}<br><strong>Dia:</strong> ${esc(a.dia)}<br><strong>Critério:</strong> ${esc(a.criterio)}</div>
-              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">Registrar execução</button></div>`:lockedCta(ATIVACAO_NIVEL)}
+              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">✓ Registrar</button></div>`:lockedCta(ATIVACAO_NIVEL)}
             </div>`;
           }).join("")}
         </div>
       </section>` :
     subTarefas==="registros" ? `
       <section class="card section">
-        <h2>Registros</h2>
+        <h2>📋 Histórico</h2>
         <div class="list">
           ${[...DB.execucoes].sort((a,b)=>b.ts-a.ts).slice(0,80).map(e=>`<div class="item">
             <div class="toprow"><h4>${esc(e.titulo)}</h4>
-              <span class="pill ${e.status==="done"?"good":e.status==="partial"?"warn":"danger"}">${e.status==="done"?"Concluída":e.status==="partial"?"Parcial":"Bloqueada"}</span></div>
+              <span class="pill ${e.status==="done"?"good":e.status==="partial"?"warn":"danger"}">${e.status==="done"?"✓ Ok":e.status==="partial"?"~ Parcial":"✕ Bloqueada"}</span></div>
             <div class="meta">${esc(e.quando)} · ${esc(e.user||"Equipe")}${e.obs?" · "+esc(e.obs):""}${e.evidencia?"<br>Evidência: "+esc(e.evidencia):""}</div>
           </div>`).join("")||`<div class="muted">Nenhum registro ainda.</div>`}
         </div>
       </section>` :
     !dia ? `
     <section class="card section">
-      <h2>Domingo</h2>
-      <div class="muted">Salão fechado. Nenhuma tarefa fixa hoje, aproveite para descansar.</div>
+      <h2>🌙 Domingo</h2>
+      <div class="muted">Salão fechado. Aproveite para descansar.</div>
     </section>` : `
     ${(dow===5||dow===6)?`<div class="notice"><strong>${esc(SALTO_APRESENTACAO)}</strong></div>`:""}
-    <div class="grid2">
-      <section class="card section">
-        <span class="sectionkick">Rotina fixa</span>
-        <h2 style="margin-top:0">${esc(dia.dia)}: ${esc(dia.foco)}</h2>
+    <div style="display:grid;gap:28px">
+      <div class="panel-section">
+        <div><span class="tag">1️⃣ Primeira</span><h2>✓ Rotina Fixa do Dia</h2></div>
+        <div class="muted">O que você DEVE fazer hoje, todo dia.</div>
         <div class="list">
           ${dia.tasks.map(t=>{
             const nv=TASK_NIVEL[t.id];
             const liberado=!nv||nivelCompleto(nv);
-            return `<div class="item ${liberado?"":"locked"}">
-              <div class="toprow"><h4>${esc(t.t)}</h4>${isDone(t.id)?`<span class="pill good">Feita</span>`:liberado?`<span class="pill warn">Pendente</span>`:""}</div>
+            const feito=isDone(t.id);
+            return `<div class="item ${liberado?"":"locked"} ${feito?"opacity:.6":""}">
+              <div class="toprow"><h4>${feito?"✅":"▯"} ${esc(t.t)}</h4>${feito?`<span class="pill good">Concluída</span>`:liberado?`<span class="pill warn">Pendente</span>`:""}</div>
               <div class="meta">${esc(t.d)}</div>
-              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${t.id}','${esc(t.t)}','rotina')">Registrar</button></div>`:lockedCta(nv)}
+              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${t.id}','${esc(t.t)}','rotina')">📝 Registrar</button></div>`:lockedCta(nv)}
             </div>`;
           }).join("")}
         </div>
-      </section>
-      <section class="card section">
-        <span class="sectionkick">Contato com clientes</span>
-        <h2 style="margin-top:0">Ativações de hoje</h2>
+      </div>
+      <div class="panel-section">
+        <div><span class="tag">2️⃣ Segunda</span><h2>📞 Contato com Clientes</h2></div>
+        <div class="muted">Ativações e ações de relacionamento do dia.</div>
         ${ats.length?`<div class="list">
           ${ats.map(a=>{
             const liberado=nivelCompleto(ATIVACAO_NIVEL);
-            return `<div class="item ${liberado?"":"locked"}">
-              <div class="toprow"><h4>${esc(a.nome)}</h4>${isDone(a.id)?`<span class="pill good">Feita</span>`:liberado?`<span class="pill gold">${esc(a.freq)}</span>`:""}</div>
+            const feito=isDone(a.id);
+            return `<div class="item ${liberado?"":"locked"} ${feito?"opacity:.6":""}">
+              <div class="toprow"><h4>${feito?"✅":"▯"} ${esc(a.nome)}</h4>${feito?`<span class="pill good">Feita</span>`:liberado?`<span class="pill gold">${esc(a.freq)}</span>`:""}</div>
               <div class="meta">${esc(a.publico)}: ${esc(a.criterio)}</div>
-              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">Registrar execução</button></div>`:lockedCta(ATIVACAO_NIVEL)}
+              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">📝 Registrar</button></div>`:
+                `<div class="btnrow" style="gap:8px"><span class="muted" style="font-size:.8rem">🔒 Complete o Nível ${ATIVACAO_NIVEL.split(/(\d+)/)[1]} dos treinamentos para liberar</span><button class="btn secondary small" onclick="setView('aprender')">→ Ir para Treinamentos</button></div>`
+              }
             </div>`;
           }).join("")}
-        </div>`:`<div class="muted">Sem ativação fixa hoje. Consulte a matriz para ações pontuais e mensais.</div>`}
-      </section>
+        </div>`:`<div class="muted">Sem ativação fixa hoje. Consulte a <strong>Matriz de ativações</strong> para ações pontuais.</div>`}
+      </div>
     </div>`;
 
   return `
   ${ring}
   <div class="subtabs">
-    ${[["hoje","Hoje"],["semana","Semana"],["matriz","Matriz de ativações"],["registros","Registros"]].map(([id,l])=>
+    ${[["hoje","📌 Hoje"],["semana","📅 Semana"],["matriz","📊 Matriz"],["registros","📋 Histórico"]].map(([id,l])=>
       `<button class="subtab ${subTarefas===id?"on":""}" onclick="subTarefas='${id}';render()">${l}</button>`).join("")}
   </div>
   ${sub}`;
