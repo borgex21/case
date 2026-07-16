@@ -63,11 +63,6 @@ button{cursor:pointer}
   border:1px solid rgba(13,148,136,.22);
   color:var(--accent-ink);font-size:12.5px;font-weight:850;letter-spacing:.02em;text-align:right;white-space:nowrap;
 }
-.logoutbtn{
-  background:none;border:none;color:var(--accent-ink);font-size:16px;cursor:pointer;padding:0;opacity:.6;
-  transition:opacity .2s;
-}
-.logoutbtn:hover{opacity:1}
 .nav{display:flex;gap:8px;overflow:auto;margin-top:12px;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
 .navbtn{
@@ -82,11 +77,8 @@ button{cursor:pointer}
   backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
   border-radius:var(--radius);box-shadow:var(--shadow), inset 0 1px rgba(255,255,255,.6);
 }
-.section{padding:20px;margin-bottom:20px}
-.section h2{margin:0 0 14px;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.section:not(:last-child){border-bottom:3px solid rgba(13,148,136,.08);padding-bottom:28px;margin-bottom:28px}
-.sequence-step{display:grid;gap:4px;margin-bottom:6px;position:relative;padding-left:20px}
-.sequence-step:before{content:attr(data-num);position:absolute;left:0;width:16px;height:16px;background:rgba(13,148,136,.14);border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:800;color:var(--accent-ink)}
+.section{padding:20px;margin-bottom:14px}
+.section h2{margin:0 0 12px;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
 .muted{color:var(--muted)}
 .eyebrow{
@@ -218,10 +210,9 @@ mark{background:rgba(45,212,191,.32);color:inherit;border-radius:3px;padding:0 2
   padding:13px;border-radius:16px;border:1px solid rgba(13,148,136,.22);
   background:rgba(13,148,136,.07);color:var(--accent-ink);font-size:.86rem;line-height:1.5;margin-bottom:12px;
 }
-.modal{position:fixed;inset:0;background:rgba(11,31,34,.35);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;padding:14px}
+.modal{position:fixed;inset:0;background:rgba(11,31,34,.35);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:14px}
 .modal.open{display:flex}
-#loginModal{align-items:center !important;justify-content:center !important}
-.sheet{width:100%;max-width:540px;background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border:1px solid var(--glass-edge);border-radius:26px;padding:20px;box-shadow:var(--shadow)}
+.sheet{width:100%;max-width:540px;background:rgba(255,255,255,.85);backdrop-filter:blur(30px);border:1px solid var(--glass-edge);border-radius:26px 26px 18px 18px;padding:20px;box-shadow:var(--shadow)}
 .sheet h3{margin:0 0 4px;font-size:1.2rem;letter-spacing:-.03em}
 .sheet p{color:var(--muted);font-size:.9rem;line-height:1.5;margin:0 0 14px}
 .footbar{
@@ -347,19 +338,6 @@ mark{background:rgba(45,212,191,.32);color:inherit;border-radius:3px;padding:0 2
       <button class="btn secondary small" onclick="closeModal()">Cancelar</button>
       <button class="btn small" id="modalConfirm">Confirmar</button>
     </div>
-  </div>
-</div>
-
-<div class="modal" id="loginModal" style="display:none" onclick="if(event.target.id==='loginModal')return">
-  <div class="sheet" style="max-width:320px">
-    <h3>Acesso Restrito</h3>
-    <p style="color:var(--muted);font-size:.9rem">Digite seu nome e senha para acessar</p>
-    <div style="display:grid;gap:10px;margin:16px 0">
-      <input type="text" id="loginName" placeholder="Seu nome" style="padding:10px;border:1px solid var(--line);border-radius:10px;font-family:inherit">
-      <input type="password" id="loginPass" placeholder="Senha" style="padding:10px;border:1px solid var(--line);border-radius:10px;font-family:inherit" onkeypress="if(event.key==='Enter')loginUser()">
-    </div>
-    <button class="btn" style="width:100%" onclick="loginUser()">Entrar</button>
-    <div id="loginError" style="color:var(--danger);font-size:.85rem;margin-top:10px;text-align:center;display:none"></div>
   </div>
 </div>
 
@@ -797,84 +775,42 @@ const TRILHA = [
   {id:"n1", nome:"Nível 1 · Fundamentos", desc:"Padrão da casa: postura, imagem e abertura impecável.", missoes:[
     {id:"m1", t:"Padrão geral de execução", pop:null, resumo:"Educação, objetividade, registro e comunicação imediata de desvios. Nunca improvisar fora do padrão.",
       steps:["Tratar clientes, equipe e parceiros com educação, objetividade e postura profissional.","Manter apresentação, ambiente, materiais e registros no padrão da empresa.","Registrar informações relevantes no sistema ou controle correspondente.","Comunicar imediatamente atraso, divergência, risco ou erro de agenda.","Em caso de dúvida, acionar a gerência. Nunca improvisar."],
-      quiz:{q:"Você identifica que uma cliente foi anotada com a profissional errada amanhã de manhã. Você já sabe que pode remarcá-la em 1 hora ligando (tempo suficiente antes do atendimento). Qual a abordagem correta?", opts:["Corrigir no sistema agora, remarcar discretamente por telefone e avisar a gerência no intervalo, já que solucionou","Registrar o erro no sistema E comunicar a gerência verbalmente agora, deixando ela orientar a ação de remarcação","Ligar para a cliente imediatamente, confirmar a remarcação, registrar e depois avisar a gerência"], correct:1, exp:"Comunicação imediata com a gerência não é opcional mesmo quando você já tem solução. Ela precisa saber em tempo real para monitorar, registrar o desvio e ajudar se a remarcação falhar. Você executa sob orientação dela, não substitui a decisão dela."}},
+      quiz:{q:"Você percebe um erro na agenda que pode afetar uma cliente daqui a 2 horas. Ainda dá tempo de resolver sozinho antes que vire problema. Qual a atitude correta?", opts:["Corrigir agora e avisar a gerência só no fechamento do dia, já que o problema foi resolvido","Comunicar a gerência imediatamente e registrar a situação, mesmo já tendo uma solução em mente","Registrar no sistema e seguir em frente, sem necessidade de avisar verbalmente"], correct:1, exp:"Ter tempo para resolver sozinho não dispensa a comunicação imediata. A gerência precisa saber em tempo real, não só depois pelo registro."}},
     {id:"m2", t:"Apresentação pessoal", pop:"apresentacao", resumo:"Sua imagem é a primeira prova do padrão Sala D'Oro.",
-      quiz:{q:"É sexta de manhã. Você vem com uniforme impecável, unhas em tom neutro com design discreto (apenas uma listra fina), um anel simples e cabelo preso. A gerência comenta nada, clientes elogiam a apresentação. Qual é a leitura correta?", opts:["O design nas unhas, mesmo discreto, cruza o padrão — o correto é cor sólida neutra sem adorno nenhum","A apresentação está adequada: discrição é sobre proporção e bom gosto, não eliminar toda personalidade","O design foi aceitável segunda, mas sexta exige ainda mais conservadorismo, então deveria ser só cor sólida"], correct:0, exp:"Discrição no contexto Sala D'Oro significa cor sólida sem adorno visual. Design discreto ainda é adorno. Na sexta (pico de visibilidade) a régua não muda — o padrão é consistente. O silêncio da gerência não significa aprovação; significa que passou desta vez, mas o ideal é cor absolutamente neutra."}},
+      quiz:{q:"Qual das opções respeita integralmente o padrão de apresentação pessoal?", opts:["Unhas grandes e decoradas, já que simbolizam capricho com a própria imagem","Uniforme impecável, unhas em tom neutro e apenas um acessório discreto","Maquiagem leve, mas com batom em tom vibrante para transmitir energia"], correct:1, exp:"O padrão pede discrição: unhas neutras, acessórios simples e maquiagem suave. Unhas decoradas e batom vibrante fogem do acabamento profissional esperado."}},
     {id:"m3", t:"Abertura do salão", pop:"abertura", resumo:"Checklist físico + sistemas + agenda + lista da vez do dia anterior.",
-      quiz:{q:"Ao abrir o salão, você vê que ontem uma profissional marcada como 'ocupada' não retornou ao status 'presente'. Hoje é segunda, a agenda já está 85% lotada desde 8h e o gerente ainda não chegou. O que fazer?", opts:["Deixar ela como 'ocupada' por enquanto e avisar quando o gerente chegar; a agenda cheia é prioridade agora","Mudar para 'presente' e começar a girar normalmente; ontem era fim de dia e provavelmente foi esquecido","Conferir com a própria profissional se continua indisponível ANTES de girar o rodízio ou mudar status sem validação"] correct:2, exp:"O status é dado de rodízio, não de convenção. Mudá-lo ou ignorá-lo sem validar com a profissional quebra o registro auditável. Agenda cheia não dispensa precisão no ponto de partida. A regra exige confirmar antes de girar."}},
+      quiz:{q:"No checklist de abertura, antes dos primeiros atendimentos do dia, o que exige validação específica da véspera?", opts:["Apenas a agenda de hoje, já que ontem já foi encerrado no fechamento de caixa","A lista da vez do dia anterior, conferindo pendências antes de girar o rodízio de hoje","Somente os comprovantes de pagamento de ontem, para bater com o sistema"], correct:1, exp:"O fechamento de caixa não encerra a lista da vez. Pendências de rodízio da véspera afetam a justiça da distribuição de hoje."}}]},
   {id:"n2", nome:"Nível 2 · Agenda e Cadastro", desc:"O coração da operação: agendar certo, cadastrar completo.", missoes:[
     {id:"m4", t:"Cadastro de cliente", pop:"cadastro", resumo:"Nome, telefone, aniversário, origem. Cadastro incompleto é ativação perdida.",
-      quiz:{q:"Uma cliente retorna sem preferência de profissional. Ao agendar, ela comenta 'ah, fui indicada por um amigo, não lembro qual'. Você pergunta mais, ela não especifica. Como registrar a origem?", opts:["Marcar como 'Indicação' e depois conferir qual profissional ela frequentou antes para refinar","Deixar em branco porque ela não soube confirmar; origem imprecisa é pior que nenhuma","Registrar como 'Indicação' mesmo sem saber qual profissional: o fato dela ter sido indicada é o dado que alimenta o funil de retenção"] correct:2, exp:"Origem 'indicação' por si só já dispara ativações de retenção específicas — precisamente porque alguém a recomendou. Se fosse retorno espontâneo ou tráfego pago, a abordagem seria outra. Deixar em branco perde a oportunidade de tratar com a atenção que indicação merece."}},
+      quiz:{q:"Por que é importante registrar a origem da cliente (indicação, tráfego pago, Instagram, retorno espontâneo)?", opts:["É dado estatístico interessante, mas não influencia nenhuma rotina do dia a dia","Alimenta a Matriz de Ativações e mostra qual canal de aquisição merece mais investimento","Serve apenas para a nota fiscal, quando a cliente solicitar CPF"], correct:1, exp:"Origem não é estatística solta: alimenta ativações específicas por canal e orienta onde investir esforço."}},
     {id:"m5", t:"Agendamento", pop:"agendamento", resumo:"Histórico, preferência, disponibilidade, confirmação. Sem preferência → lista da vez.",
-      quiz:{q:"Uma cliente que retorna pela primeira vez liga sem preferência de profissional. Dois profissionais têm o mesmo horário disponível: um com agenda vazia e outro que acabou de terminar um atendimento. Qual critério prevalece para decisão?", opts:["O profissional com agenda mais vazia, para otimizar distribuição operacional","O profissional que acabou de terminar, já que está mentalmente fresco","A lista da vez, que garante justiça independente de ocupação ou contexto"], correct:2, exp:"A lista da vez não leva em conta ocupação, cansaço ou contexto. Ela existe justamente para remover decisões subjetivas e garantir que cada profissional recebe sua vez na ordem, sem exceções."}},
+      quiz:{q:"Cliente nova liga sem profissional de preferência. Um profissional está com a agenda visivelmente mais vazia hoje. Como decidir quem atende?", opts:["Direcionar para quem está com a agenda mais vazia, otimizando a ocupação do dia","Usar a lista da vez de forma discreta, justa e registrada, independente da ocupação de cada um","Perguntar à cliente se ela tem preferência por personalidade, já que é a primeira vez dela"], correct:1, exp:"Ocupação da agenda não é critério de distribuição. A lista da vez existe para não depender de conveniência operacional."}},
     {id:"m6", t:"Telefone e WhatsApp", pop:"telefone", resumo:"Saudação padrão, entender antes de ofertar, sequência de conversão D0–D7.",
-      quiz:{q:"Uma cliente recebeu a proposta completa por WhatsApp, reagiu com 👍, mas sumiu da conversa por 3 dias. Você sabe que ela tem agenda apertada e trabalha o dia inteiro. Qual é a abordagem correta?", opts:["Ligar imediatamente, já que o 👍 mostra interesse confirmado e o silêncio pode indicar mudança de ideia","Enviar outro WhatsApp em tom mais casual para 'avivar' a conversa antes de ligar","Seguir a régua D0, D1, D3, D5 e D7, respeitando a etapa e não pulando para ligação por interpretação de contexto"], correct:2, exp:"Reagir 👍 não libera pulo de etapas. Contexto do dia ocupado também não. A régua é fixa: cada etapa tem timing e abordagem definida, sem improviso baseado em interpretação."}}]},
+      quiz:{q:"Uma conversa de WhatsApp está sem resposta há 3 dias. A cliente pareceu bem interessada no primeiro contato. Qual a conduta correta?", opts:["Ligar imediatamente por telefone, já que ela demonstrou interesse real","Seguir a régua D0, D1, D3, D5 e D7, respeitando a etapa correspondente ao tempo decorrido","Aguardar mais alguns dias antes de qualquer novo contato, para não parecer insistente"], correct:1, exp:"Interesse inicial não muda a régua. Pular etapas ou esperar demais quebra o método: cada etapa tem uma abordagem específica."}}]},
   {id:"n3", nome:"Nível 3 · Experiência da Cliente", desc:"Do primeiro sorriso à espera bem gerida.", missoes:[
     {id:"m7", t:"Primeiro contato no salão", pop:"primeirocontato", resumo:"Sorriso, nome, água/café/Wi-Fi, acompanhamento até o profissional.",
-      quiz:{q:"Cliente chega no horário marcado. O profissional está ainda 10min ocupado. Ela diz 'tudo bem, pode deixar' com tom descontraído e se senta sozinha mexendo no celular. Qual é o procedimento?", opts:["Validar que ela está confortável com a espera e retomar seu trabalho na recepção","Oferecer água/café/Wi-Fi e permanecer próximo para acompanhar sua experiência até ser chamada","Remarcar para outro dia, já que evidentemente ela não quer incomodar"] correct:1, exp:"Conforto aparente não dispensa o acolhimento. Deixá-la sozinha quebrando contato visual é negligência de experiência, mesmo que ela tenha dito 'tudo bem'. O padrão é proativo: água, café, conexão e presença — não reativo ao que ela pede."}},
+      quiz:{q:"A cliente chegou no horário, mas o profissional ainda está finalizando outro atendimento e ela parece impaciente. O que fazer?", opts:["Sugerir gentilmente remarcar para um horário sem risco de atraso","Acomodar a cliente, oferecer água, café ou Wi-Fi e zelar por ela durante a espera","Explicar a demora e pedir que aguarde em pé próximo à recepção, já que deve ser rápido"], correct:1, exp:"Zelar pela cliente durante a espera é a resposta correta, não remarcar por impaciência nem deixá-la sem acomodação."}},
     {id:"m8", t:"Cliente em espera", pop:"espera", resumo:"Transparência + tempo estimado + cronometrar + reposicionar antes do limite.",
-      quiz:{q:"Você disse '15 minutos de espera' há 13 minutos. A cliente está absorta em conteúdo no telefone, rosto relaxado, nenhum sinal de impaciência. Mas você sabe que o profissional está atrasado e serão 22 minutos. Qual é a ação correta?", opts:["Deixar como está, já que ela não demonstra incômodo e talvez nem note os extra 7 minutos","Proativamente avisar agora mesmo: explicar a situação, pedir desculpas e validar se ela continua confortável","Esperar até o minuto 15, aí sim avisar sobre o atraso, porque nesse ponto fica impossível esconder"] correct:1, exp:"A paciência dela não te libera do compromisso que você fez. Avisar proativamente antes do limite combatido quebra só quando é inevitável, não quando fica 'visível'. Ela não perceber o tempo não significa que você não quebrou a confiança ao não avisar."}},
+      quiz:{q:"Você informou 15 minutos de espera. Aos 14 minutos, fica claro que vai passar um pouco do combinado. Qual o momento certo de agir?", opts:["Esperar completar os 15 minutos exatos e só então explicar, já que o atraso pode não se confirmar","Explicar novamente antes do limite combinado, pedir desculpas e oferecer alternativa","Aguardar a cliente perguntar sobre o atraso antes de se posicionar"], correct:1, exp:"O padrão exige agir antes do limite estourar, não no instante exato nem depois que a cliente questiona."}},
     {id:"m9", t:"Lista da vez", pop:"listadavez", resumo:"Ordem fixa, marcador gira, ausente anula posição, tudo registrado.",
-      quiz:{q:"O profissional que é 'da vez' hoje sai para resolver uma emergência pessoal (20min no máximo). Você avança o rodízio para o próximo normalmente. Ele retorna em 15min, quando você já está na metade do atendimento com o cliente do próximo da fila. Qual o registro correto?", opts:["Manter o rodízio onde está (próximo profissional como da vez) já que você já iniciou o atendimento","Voltar a marcar o profissional original como 'da vez' porque ele retornou dentro do tempo estimado","Registrar a saída dele como 'indisponibilidade 20min' e manter o rodízio no próximo: ele perdeu a vez dessa vez"] correct:2, exp:"Indicar indisponibilidade registra o desvio mas não 'cancela' o rodízio — ele fica na fila, só que passando a vez. Voltar a marcar como 'da vez' é privilégio que não existe. O rodízio já girou quando ele saiu. Quando retorna, ele entra na sequência seguinte, não pula de volta."}},
+      quiz:{q:"O profissional da vez não pode atender um encaixe que surgiu de última hora. O que fazer com a posição dele na fila?", opts:["Passar direto para o próximo da fila, já que o imprevisto foi resolvido rápido","Registrar a indisponibilidade e passar para o próximo conforme a regra, mantendo o rodízio auditável","Pular a vez dele sem registrar, para não atrasar o atendimento da cliente"], correct:1, exp:"Passar para o próximo sem registrar quebra a rastreabilidade do rodízio. O registro é parte da regra, não um passo opcional."}}]},
   {id:"n4", nome:"Nível 4 · Comercial e Fechamento", desc:"Revenda, cobrança e caixa sem fricção.", missoes:[
     {id:"m10", t:"Revenda de produtos", pop:"revenda", resumo:"Indicação do profissional primeiro; sem indicação, necessidade antes de sugestão.",
-      quiz:{q:"Cliente chegando no caixa. O profissional que a atendeu está entregando-a pra você e comenta rápido 'tá tudo certo com ela, vê aí'. A cliente diz 'ah, compra aí um leave-in, meu cabelo ficou seco'. O profissional não deixou indicação registrada. Qual a ação correta?", opts:["Oferecer o leave-in imediatamente, já que ela mesma identificou a necessidade","Perguntar discretamente ao profissional se indicou algo antes de assumir; só apresentar se ele confirmar","Oferecer água, confirmar se ficou feliz com o atendimento, depois perguntar se há indicação do profissional para produtos"] correct:2, exp:"A verbalização dela de necessidade não substitui a indicação do profissional. Pode ser que ele tenha deixado indicado verbalmente sem você ter ouvido. Confirmar de verdade com ele (sim/não) é mais importante que reagir rápido. Prioridade real: confirmar indicação → depois oferecer."}},
+      quiz:{q:"Antes de sugerir qualquer produto na revenda, qual deve ser o primeiro passo?", opts:["Entender a necessidade da cliente, já que é a base de qualquer boa venda","Perguntar se algum produto foi indicado pelo profissional que atendeu","Apresentar o produto de maior ticket, para maximizar a venda"], correct:1, exp:"A indicação do profissional tem prioridade sobre a investigação de necessidade feita pela recepção: ela já vem de quem acompanhou o atendimento."}},
     {id:"m11", t:"Cobrança e fechamento", pop:"cobranca", resumo:"Confirmar serviços, perguntar se ficou feliz ANTES de cobrar, nunca sair sem pagamento validado.",
-      quiz:{q:"A cliente está no caixa para pagar. Você percebe uma leve enrugada na testa quando olha para o cabelo/resultado, mas ela não verbaliza qualquer reclamação. Como proceder?", opts:["Perguntar diretamente se ficou insatisfeita e oferecer refazer se necessário, mostrando proatividade","Confiar na falta de verbalização e concluir a cobrança normalmente, evitando sugerir problemas que ela talvez não tenha percebido","Travar a cobrança e informar à gerência sobre a expressão observada, mesmo sem confir mação verbal da cliente"], correct:2, exp:"A comunicação não-verbal é dado. Uma enrugada na testa pode ser o último sinal antes da cliente sair decepcionada. Travar e chamar a gerência preserva a venda e a relação, sem depender de ela verbalizar o problema."}},
+      quiz:{q:"Na hora de fechar a comanda, a cliente demonstra insatisfação sutil com o resultado. O que fazer?", opts:["Oferecer refazer parte do serviço imediatamente, para resolver sem envolver a gerência","Não concluir a cobrança sem acionar a gerência, mesmo que a insatisfação pareça pequena","Concluir a cobrança normalmente e sugerir que ela retorne outro dia para ajustes"], correct:1, exp:"Qualquer sinal de insatisfação, mesmo sutil, trava a cobrança até a gerência avaliar. Resolver por conta própria ou seguir em frente arrisca perder a última chance de reverter a experiência."}},
     {id:"m12", t:"Fechamento de caixa", pop:"caixa", resumo:"Conferir formas de pagamento, comparar comprovantes × sistema, reportar divergências.",
-      quiz:{q:"Fechamento de caixa: sistema diz R$ 1.200 em débito, mas você tem só 3 comprovantes = R$ 950. Faltam R$ 250. Ao procurar mais perto, você encontra um recibo rasgado de uma cliente que pagou em débito, valor compatível. Qual é o passo seguinte?", opts:["Colar o recibo no comprovante, registrar como achado e fechar o caixa com tudo reconciliado","Lançar o valor encontrado no sistema para bater, marcar como 'correção manual caixa física'","Comunicar a situação com o recibo rasgado para a gerência antes de qualquer ajuste no sistema"], correct:2, exp:"Encontrar o comprovante não encerra a investigação. Um recibo rasgado é evidência de um problema: pode ser erro de cálculo anterior, problema de máquina, ou cliente que contestou depois. A gerência precisa validar se é seguro fechar o caixa com isso. Você não 'resolve' divergências; você as comunica com evidência e deixa a gerência decidir."}},
+      quiz:{q:"Os comprovantes físicos não batem com o sistema no fechamento de caixa. Qual a atitude correta?", opts:["Recontar tudo sozinho até achar o erro, comunicando a gerência só se não conseguir resolver","Comunicar a divergência para a gerência imediatamente, mesmo antes de entender a causa completa","Ajustar o valor no sistema para bater com o físico e registrar a diferença como ajuste de caixa"], correct:1, exp:"A comunicação imediata não depende de já ter a causa raiz identificada. Investigar sozinho antes de avisar atrasa a resposta da gerência."}}]},
   {id:"n5", nome:"Nível 5 · Relacionamento Avançado", desc:"A máquina de ativação: sequência de conversão, funil e recuperação de agenda.", missoes:[
     {id:"m13", t:"Sequência de Conversão D0–D7 e funil", pop:"followup", resumo:"Régua de contato + classificação por etapa do funil + registro de cada tentativa.",
-      quiz:{q:"Cliente no funil em 'oferta enviada'. Hoje é D4 (desde envio). Você tenta ligar mas ele não atende. Você deixa mensagem de áudio. No mesmo dia, 4h depois, ele responde com 'valeu, tô interessado, me liga semana que vem que tô muito ocupado'. Qual é a ação e classificação agora?", opts:["Manter em 'oferta enviada' e anotar que confirmou interesse; seguir a próxima tentativa em D5 conforme régua","Avançar para 'qualificado/com interesse' porque ele respondeu; reagendar a próxima tentativa para a semana que vem","Manter em 'oferta enviada', registrar a resposta de hoje como D4, anotar o novo timing (próxima semana) e traçar novo plano de ação"] correct:2, exp:"Resposta é dado mas não muda a etapa do funil automaticamente. Ele ainda está em 'oferta enviada' até conversão real. O fato de estar ocupado e pedir para semana que vem é contexto válido — registra e replana, mas a etapa não muda porque ele não comprou e não se qualificou formalmente."}},
+      quiz:{q:"Um cliente recebeu uma oferta detalhada e sumiu da conversa há 4 dias. Em qual etapa do funil ele está e qual a ação correta?", opts:["Volta para cliente novo, já que o silêncio reinicia o processo de qualificação","Permanece em oferta enviada/objeção, seguindo a régua D0 a D7 com registro de cada tentativa","Perdida, porque 4 dias de silêncio já indica desistência"], correct:1, exp:"Silêncio depois de oferta não reinicia o funil nem classifica como perdido antes do D7. A etapa se mantém e a régua continua até o prazo definido."}},
     {id:"m14", t:"Ativações de relacionamento e retorno", pop:null, resumo:"As ativações reais: pós-atendimento, canceladas/faltantes, 5 lembretes por serviço, ação de recorrência, inativas e aniversariantes.",
       steps:["Toda terça: pós-atendimento com avaliação no Google e recuperação de canceladas e faltantes da semana anterior.","Toda quinta: os cinco lembretes por serviço, reflexo, coloração, unha em gel, corte masculino e podologia.","Todo dia: pós-atendimento da cliente atendida ontem.","Quinzenal: ação de recorrência para clientes antes de completar um mês sem retorno.","Mensal: clientes inativas há 60 dias ou mais, com ação exclusiva variável, e aniversariantes com o Ritual de Tratamento Express."],
-      quiz:{q:"É terça. Você já fez pós-atendimento + recuperação de canceladas/faltantes. Faltam 2h para o almoço. Você recebe uma cliente que marca para amanhã (quarta) um serviço 'dos 5 lembretes' (reflexo). Qual é a prioridade: continuar com pendências de terça ou registrar essa confirmação?", opts:["Terminar o ciclo de terça primeiro; a confirmação de quarta fica registrada de qualquer forma","Registrar a confirmação e prosseguir normalmente: ela já está agendada, tarefa concluída","Registrar a confirmação de quarta, mas anotar para conferir se ainda precisa fazer o lembrete dela na quinta — pode que não caia mais no script"] correct:2, exp:"Confirmação é dado de alta prioridade: cliente proativa marca um dos 5 lembretes antes de quinta. Registra E tira do script de quinta se foi ela que marcou por conta própria. A régua é estrutura, não rigidez: se ela já agendou, o objetivo (retorno) foi atingido."}},
+      quiz:{q:"Hoje é terça-feira e a agenda da semana está tranquila, sem urgência aparente. Qual ativação é prioridade do dia mesmo assim?", opts:["Os cinco lembretes de retorno por serviço, já que são o volume mais previsível","Pós-atendimento e canceladas/faltantes, recuperando quem quase saiu da base","Aniversariantes do mês seguinte, para antecipar o planejamento"], correct:1, exp:"Terça é o dia de pós-atendimento e recuperação de canceladas/faltantes. Os cinco lembretes por serviço são prioridade de quinta."}},
     {id:"m15", t:"Reporte semanal", pop:null, resumo:"Fechar a semana com números: ativações, respostas, agendamentos e perdas por indisponibilidade.",
       steps:["Consolidar ativações realizadas na semana por tipo de ação.","Contar respostas e agendamentos gerados.","Registrar perdas por falta de horário ou profissional, com motivo.","Reportar à gerência no fechamento de sexta."],
-      quiz:{q:"Na semana você registrou 12 ativações feitas, 8 respostas e 5 agendamentos gerados. Uma cliente entrou em contato terça pedindo córte com a profissional X, que estava indisponível toda a semana. Ela marcou para segunda que vem. Qual é o reporte correto?", opts:["5 agendamentos na semana + 1 perda por indisponibilidade (segunda que vem não conta como 'semana desta')","6 agendamentos na semana (porque a cliente confirmou, mesmo que a data seja futura)","5 agendamentos desta semana + 1 agendamento futuro registrado + 1 perda por indisponibilidade (a semana toda sem opção)"] correct:2, exp:"Agendamentos que caem numa semana futura não contam como agendamentos 'desta semana'. MAS a perda SIM conta: ela foi deflagrada esta semana (indisponibilidade desta semana). O reporte mostra causa + efeito: por que não agendou esta semana (falta de X), então registra o bloqueador, não o resultado futuro."}},
+      quiz:{q:"Uma cliente quis agendar mas não havia horário disponível. Ela não insistiu depois. Isso entra no reporte semanal?", opts:["Só entra se ela insistir mais de uma vez, mostrando interesse real","Sim, entra como perda por indisponibilidade, com o motivo registrado para análise da gerência","Não entra, porque sem agendamento fechado não há o que reportar"], correct:1, exp:"A perda por indisponibilidade é dado de gestão independente de insistência da cliente: mostra demanda reprimida e orienta ajustes de agenda."}}]}
 ];
-
-/* ============ AUTENTICAÇÃO ============ */
-const TEAM_MEMBERS = {
-  "Alan":"alan2026","Amorim":"amorim2026","Cidinha":"cidinha2026","Claudinha":"claudinha2026",
-  "Cley":"cley2026","Colli":"colli2026","Dani":"dani2026","Enrique":"enrique2026",
-  "Guilherme":"guilherme2026","Henrique":"henrique2026","Iara":"iara2026","Jeová":"jeova2026",
-  "Marcelo":"marcelo2026","Netto":"netto2026","Taina":"taina2026",
-  "Andressa":"andressa2026","Day":"day2026","Elza":"elza2026","Elizangela":"elizangela2026",
-  "Andrea":"andrea2026","Fátima Barbosa":"fatima.barbosa2026","Fátima Mota":"fatima.mota2026",
-  "Maria":"maria2026","Selma":"selma2026","Sheila":"sheila2026",
-  "Apollo":"apollo2026","Marta":"marta2026","Lays":"lays2026",
-  "Fran":"fran2026","Kassio":"kassio2026",
-  "diego":"123"
-};
-function loginUser(){
-  const name=document.getElementById("loginName").value.trim();
-  const pass=document.getElementById("loginPass").value;
-  const errDiv=document.getElementById("loginError");
-  if(!TEAM_MEMBERS[name]){
-    errDiv.textContent="Nome não encontrado";
-    errDiv.style.display="block";
-    return;
-  }
-  if(TEAM_MEMBERS[name]!==pass){
-    errDiv.textContent="Senha incorreta";
-    errDiv.style.display="block";
-    return;
-  }
-  DB.user=name;
-  save();
-  document.getElementById("loginModal").style.display="none";
-  render();
-}
-function logout(){
-  if(!confirm("Sair da conta?"))return;
-  DB.user="";
-  save();
-  document.getElementById("loginModal").style.display="flex";
-  document.getElementById("loginName").value="";
-  document.getElementById("loginPass").value="";
-  document.getElementById("loginError").style.display="none";
-}
 
 /* Lista da vez: categorias e regras do Motor de Distribuição (equipe real, unidade Alphaville) */
 const VEZ_DEFAULT_CATS = [
@@ -912,7 +848,7 @@ function load(){
     if(raw) return JSON.parse(raw);
   }catch{}
   return {
-    user:"", view:"painel",
+    user:"", view:"aprender",
     training:{done:{}},
     execucoes:[],           // registros de tarefas/ativações
     vez:{cats:structuredClone(VEZ_DEFAULT_CATS), state:freshVezState(), catAtual:"cab", log:[]}
@@ -944,22 +880,11 @@ function normalizeVez(){
 
 /* ============ NAVEGAÇÃO ============ */
 const VIEWS=[
-  ["painel","Painel"],["aprender","Treinamentos"],
-  ["procedimentos","Google dos Procedimentos"],["vez","Lista da Vez"]
+  ["aprender","Treinamentos"],["procedimentos","Procedimentos"],
+  ["painel","Painel"],["vez","Lista da Vez"]
 ];
 let missaoAberta=null;
 let quizEstado=null;
-let quizOpcoesMapeadas=null; // { original: shuffled }
-function embaralharOpcoes(quiz){
-  const indices=[0,1,2].sort(()=>Math.random()-.5);
-  quizOpcoesMapeadas={};
-  const optsEmbaralhadas=[];
-  indices.forEach((origIdx,newIdx)=>{
-    quizOpcoesMapeadas[newIdx]=origIdx;
-    optsEmbaralhadas.push(quiz.opts[origIdx]);
-  });
-  return {opts:optsEmbaralhadas,correctIdx:indices.indexOf(quiz.correct)};
-}
 let setorAprender="recepcao";
 let subAprender="videos";
 let subTarefas="hoje";
@@ -972,19 +897,12 @@ function setView(v){DB.view=v;missaoAberta=null;quizEstado=null;save();render()}
 
 /* ============ RENDER GERAL ============ */
 function render(){
-  if(!DB.user){
-    document.getElementById("loginModal").style.display="flex";
-    return;
-  }
-  document.getElementById("loginModal").style.display="none";
   normalizeVez();
   const nav=VIEWS.map(([id,l])=>`<button class="navbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
   document.getElementById("mainNav").innerHTML=nav;
   document.getElementById("footNav").innerHTML=VIEWS.map(([id,l])=>`<button class="footbtn ${DB.view===id?"on":""}" onclick="setView('${id}')">${l}</button>`).join("");
   document.getElementById("viewTitle").textContent=VIEWS.find(v=>v[0]===DB.view)?.[1]||"Treinamentos";
-  document.getElementById("whoBox").innerHTML=DB.user
-    ? `<span>${esc(DB.user)}</span><button class="logoutbtn" onclick="logout()" title="Sair">✕</button>`
-    : "Equipe de Relacionamento";
+  document.getElementById("whoBox").textContent=DB.user||"Equipe de Relacionamento";
   const main=document.getElementById("main");
   main.innerHTML =
     DB.view==="procedimentos" ? renderProcedimentos() :
@@ -1021,17 +939,52 @@ function renderSpotlightComercial(){
 
 /* ============ APRENDER (Vídeos + Treinamentos, por setor) ============ */
 const SETORES_APRENDER=[
-  {id:"recepcao", nome:"Recepção"}
+  {id:"recepcao", nome:"Recepção"},
+  {id:"cab_jr", nome:"Cabeleireiros Jr. (Assistentes)"}
 ];
 function renderAprender(){
   if(missaoAberta) return renderMissao();
-  const tabs=[["videos","📹 Vídeos de aprendizado"],["trilha","🎯 Sua trilha de formação"]];
+  const setorPicker=`<div class="subtabs">${SETORES_APRENDER.map(s=>`<button class="subtab ${setorAprender===s.id?"on":""}" onclick="setorAprender='${s.id}';render()">${esc(s.nome)}</button>`).join("")}</div>`;
+  if(setorAprender==="cab_jr") return setorPicker+renderSetorCabeleireiroJr();
+  const tabs=[["videos","Vídeos"],["trilha","Trilha"]];
   const body = subAprender==="trilha" ? renderTrilha() : renderVideos();
-  return `
-  <div class="subtabs" style="margin-bottom:16px;border-bottom:2px solid rgba(13,148,136,.08);padding-bottom:14px">
-    ${tabs.map(([id,l])=>`<button class="subtab ${subAprender===id?"on":""}" onclick="subAprender='${id}';render()" style="font-weight:700">${l}</button>`).join("")}
+  return `${setorPicker}
+  <div class="subtabs">
+    ${tabs.map(([id,l])=>`<button class="subtab ${subAprender===id?"on":""}" onclick="subAprender='${id}';render()">${l}</button>`).join("")}
   </div>
   ${body}`;
+}
+function renderSetorCabeleireiroJr(){
+  if(!DB.videosVistos)DB.videosVistos={};
+  const massagens=VIDEOS.filter(v=>v.id==="vcapilar"||v.id==="vtrapezio");
+  return `
+  <section class="card section">
+    <span class="sectionkick">Setor</span>
+    <h2 style="margin-top:0">Cabeleireiros Jr. (Assistentes)</h2>
+    <div class="muted" style="font-size:.86rem;line-height:1.5">Guia visual passo a passo, pensado para prática e memorização rápida. Cada etapa tem um diagrama; assista a animação completa quando quiser reforçar.</div>
+  </section>
+  ${massagens.map(v=>`
+    <section class="card section">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div>
+          <span class="sectionkick">${DB.videosVistos[v.id]?"✓ Assistido":"Guia visual"}</span>
+          <h2 style="margin-top:2px">${esc(v.titulo)}</h2>
+          <div class="muted" style="font-size:.86rem">${esc(v.sub)}</div>
+        </div>
+        <button class="btn secondary small" onclick="playVideo('${v.id}')">Ver animação ▶</button>
+      </div>
+      <div class="steps" style="margin-top:14px">
+        ${v.cenas.map(c=>`<div class="step" style="grid-template-columns:52px 1fr">
+          <div style="width:48px;height:48px;display:grid;place-items:center;background:rgba(13,148,136,.07);border-radius:14px;overflow:hidden">${visSVG(c.vis)}</div>
+          <div>
+            <div class="sectionkick" style="margin-bottom:2px">${esc(c.k)}</div>
+            <p style="margin:0 0 4px;font-weight:750">${esc(c.t)}</p>
+            ${c.pts.map(p=>`<p style="margin:2px 0;color:var(--muted);font-size:.85rem;line-height:1.4">${esc(p)}</p>`).join("")}
+          </div>
+        </div>`).join("")}
+      </div>
+    </section>`).join("")}
+  `;
 }
 
 /* ============ TREINAMENTOS ============ */
@@ -1041,9 +994,9 @@ function renderTrilha(){
   let unlocked=true;
   return `
   <section class="card section">
-    <h2>Sua trilha de formação</h2>
-    <div class="muted" style="font-size:.86rem;margin-bottom:14px">Complete cada nível na sequência abaixo. Você está nos <span class="mono" style="color:var(--accent-ink);font-weight:700">${t.done}/${t.total}</span> passos.</div>
+    <h2>Trilha de formação</h2>
     <div class="progressline"><span style="width:${t.pct}%"></span></div>
+    <div class="muted" style="font-size:.86rem"><span class="mono">${t.done}/${t.total}</span> missões · complete um nível para liberar o próximo</div>
   </section>
   <div class="levels">
   ${TRILHA.map((nivel,i)=>{
@@ -1053,9 +1006,8 @@ function renderTrilha(){
     const isCurrent=thisUnlocked&&pct<100;
     if(doneCount<nivel.missoes.length) unlocked=false;
     return `<section class="card level ${isCurrent?"current":""} ${thisUnlocked?"":"locked"}">
-      <div class="levelhead" style="display:flex;align-items:center;gap:10px">
-        <div style="min-width:28px;height:28px;background:rgba(13,148,136,.14);border-radius:50%;display:grid;place-items:center;font-weight:800;color:var(--accent-ink);font-size:.85rem">${i+1}</div>
-        <strong style="flex:1">${esc(nivel.nome)}</strong>
+      <div class="levelhead">
+        <strong>${esc(nivel.nome)}</strong>
         ${pct===100?`<span class="pill good">Concluído</span>`:thisUnlocked?`<span class="pill gold mono">${pct}%</span>`:`<span class="pill neutral">🔒 Bloqueado</span>`}
       </div>
       <div class="muted" style="font-size:.86rem;margin-bottom:4px">${esc(nivel.desc)}</div>
@@ -1085,37 +1037,9 @@ function renderMissao(){
   if(!m){missaoAberta=null;return renderTrilha()}
   const steps=m.steps||POPS.find(p=>p.id===m.pop)?.steps||[];
   const done=!!DB.training.done[m.id];
-
-  // Embaralhar opções na primeira renderização da missão
-  let embaralhado;
-  if(!quizOpcoesMapeadas){
-    embaralhado=embaralharOpcoes(m.quiz);
-  }else{
-    embaralhado={opts:m.quiz.opts.map((o,i)=>{
-      const orig=Object.values(quizOpcoesMapeadas).indexOf(i);
-      return m.quiz.opts[i];
-    }).sort((a,b)=>m.quiz.opts.indexOf(a)-m.quiz.opts.indexOf(b)).map((o,i)=>{
-      const origIdx=Object.entries(quizOpcoesMapeadas).find(([_,o2])=>o2===m.quiz.opts.indexOf(o))?.[0];
-      return m.quiz.opts[origIdx];
-    }),correctIdx:Object.entries(quizOpcoesMapeadas).find(([_,o])=>o===m.quiz.correct)?.[0]};
-  }
-
-  // Simplificar: recalcular se não temos
-  if(!quizOpcoesMapeadas){
-    embaralhado=embaralharOpcoes(m.quiz);
-  }
-
-  const optsEmbaralhadas=embaralhado.opts;
-  const correctIdxEmbaralhado=embaralhado.correctIdx;
-
-  // Encontrar próxima missão
-  const nivelAtual=TRILHA.find(n=>n.missoes.some(m2=>m2.id===missaoAberta));
-  const idxMissaoAtual=nivelAtual.missoes.findIndex(m2=>m2.id===missaoAberta);
-  const proximaMissao=idxMissaoAtual<nivelAtual.missoes.length-1?nivelAtual.missoes[idxMissaoAtual+1]:null;
-
   return `<div class="missionview">
     <section class="card section">
-      <button class="btn secondary small" onclick="missaoAberta=null;quizOpcoesMapeadas=null;render()">← Voltar à trilha</button>
+      <button class="btn secondary small" onclick="missaoAberta=null;render()">← Voltar à trilha</button>
       <span class="sectionkick" style="margin-top:14px">Missão</span>
       <div style="font-size:2.1rem;font-weight:900;letter-spacing:-.045em;line-height:1.08">${esc(m.t)}</div>
       <p class="muted" style="line-height:1.5;font-size:.86rem;margin-top:6px">${esc(m.resumo)}</p>
@@ -1132,22 +1056,20 @@ function renderMissao(){
       <h2 style="margin-top:0">Decisão de campo</h2>
       <p style="margin:0 0 12px;line-height:1.5">${esc(m.quiz.q)}</p>
       <div class="list">
-        ${optsEmbaralhadas.map((o,i)=>{
+        ${m.quiz.opts.map((o,i)=>{
           let cls="";
           if(quizEstado!==null){
-            if(i===correctIdxEmbaralhado)cls="correct";
+            if(i===m.quiz.correct)cls="correct";
             else if(i===quizEstado)cls="wrong";
           }
           return `<button class="choice ${cls}" onclick="responder(${i})">${esc(o)}</button>`;
         }).join("")}
       </div>
-      ${quizEstado!==null?`<div class="feedback ${quizEstado===correctIdxEmbaralhado?"ok":"no"}" style="margin-top:10px">
-        <strong>${quizEstado===correctIdxEmbaralhado?"Correto.":"Ainda não."}</strong> ${esc(m.quiz.exp)}
+      ${quizEstado!==null?`<div class="feedback ${quizEstado===m.quiz.correct?"ok":"no"}" style="margin-top:10px">
+        <strong>${quizEstado===m.quiz.correct?"Correto.":"Ainda não."}</strong> ${esc(m.quiz.exp)}
       </div>`:""}
       <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-        ${quizEstado===correctIdxEmbaralhado&&!done?`<button class="btn" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff" onclick="irProximaMissao('${proximaMissao?.id||""}')">
-          ${proximaMissao?`Próxima missão →`:`✓ Completar nível`}
-        </button>`:""}
+        ${quizEstado===m.quiz.correct&&!done?`<button class="btn" onclick="concluirMissao()">Concluir missão ✓</button>`:""}
         ${done?`<span class="pill good" style="align-self:center">Missão concluída</span>`:""}
       </div>
     </section>
@@ -1156,15 +1078,7 @@ function renderMissao(){
 function responder(i){quizEstado=i;render()}
 function concluirMissao(){
   DB.training.done[missaoAberta]=nowBR();
-  save();missaoAberta=null;quizEstado=null;quizOpcoesMapeadas=null;render();
-}
-function irProximaMissao(proximaMissaoId){
-  DB.training.done[missaoAberta]=nowBR();
-  save();
-  missaoAberta=proximaMissaoId||null;
-  quizEstado=null;
-  quizOpcoesMapeadas=null;
-  render();
+  save();missaoAberta=null;quizEstado=null;render();
 }
 
 /* ============ PROCEDIMENTOS (o "Google") ============ */
@@ -1225,8 +1139,8 @@ function nivelCompleto(id){
 function nivelNome(id){return TRILHA.find(x=>x.id===id)?.nome.replace(/^Nível \d+ · /,"")||id}
 function lockedCta(nivelId){
   return `<div class="btnrow">
-    <span class="pill neutral">🔒 Desbloqueado com: ${esc(nivelNome(nivelId))}</span>
-    <button class="btn small" onclick="DB.view='aprender';subAprender='trilha';save();render()" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff">🎯 Ir para trilha</button>
+    <span class="pill neutral">🔒 Libera com ${esc(nivelNome(nivelId))}</span>
+    <button class="btn secondary small" onclick="DB.view='aprender';subAprender='trilha';save();render()">Ir treinar</button>
   </div>`;
 }
 function tarefasDoDia(dow){
@@ -1296,7 +1210,7 @@ function renderPainel(){
             return `<div class="item ${liberado?"":"locked"}">
               <div class="toprow"><h4>${esc(a.nome)}</h4><span class="pill ${a.freq==="Diário"?"good":a.freq==="Semanal"?"warn":"neutral"}">${esc(a.freq)}</span></div>
               <div class="meta"><strong>Público:</strong> ${esc(a.publico)}<br><strong>Dia:</strong> ${esc(a.dia)}<br><strong>Critério:</strong> ${esc(a.criterio)}</div>
-              ${liberado?`<div class="btnrow"><button class="btn small" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">✓ Registrar</button></div>`:lockedCta(ATIVACAO_NIVEL)}
+              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">Registrar execução</button></div>`:lockedCta(ATIVACAO_NIVEL)}
             </div>`;
           }).join("")}
         </div>
@@ -1329,7 +1243,7 @@ function renderPainel(){
             return `<div class="item ${liberado?"":"locked"}">
               <div class="toprow"><h4>${esc(t.t)}</h4>${isDone(t.id)?`<span class="pill good">Feita</span>`:liberado?`<span class="pill warn">Pendente</span>`:""}</div>
               <div class="meta">${esc(t.d)}</div>
-              ${liberado?`<div class="btnrow"><button class="btn small" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff" onclick="registrar('${t.id}','${esc(t.t)}','rotina')">✓ Registrar</button></div>`:lockedCta(nv)}
+              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${t.id}','${esc(t.t)}','rotina')">Registrar</button></div>`:lockedCta(nv)}
             </div>`;
           }).join("")}
         </div>
@@ -1343,20 +1257,19 @@ function renderPainel(){
             return `<div class="item ${liberado?"":"locked"}">
               <div class="toprow"><h4>${esc(a.nome)}</h4>${isDone(a.id)?`<span class="pill good">Feita</span>`:liberado?`<span class="pill gold">${esc(a.freq)}</span>`:""}</div>
               <div class="meta">${esc(a.publico)}: ${esc(a.criterio)}</div>
-              ${liberado?`<div class="btnrow"><button class="btn small" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;color:#fff" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">✓ Registrar</button></div>`:lockedCta(ATIVACAO_NIVEL)}
+              ${liberado?`<div class="btnrow"><button class="btn secondary small" onclick="registrar('${a.id}','${esc(a.nome)}','ativacao')">Registrar execução</button></div>`:lockedCta(ATIVACAO_NIVEL)}
             </div>`;
           }).join("")}
         </div>`:`<div class="muted">Sem ativação fixa hoje. Consulte a matriz para ações pontuais e mensais.</div>`}
       </section>
     </div>`;
 
-  const tabs=`<div class="subtabs" style="margin-bottom:20px;border-bottom:2px solid rgba(13,148,136,.08);padding-bottom:16px">
-    ${[["hoje","1️⃣ Rotina de hoje"],["semana","2️⃣ Cronograma"],["matriz","3️⃣ Ativações"],["registros","📋 Registros"]].map(([id,l])=>
-      `<button class="subtab ${subTarefas===id?"on":""}" onclick="subTarefas='${id}';render()" style="font-weight:700">${l}</button>`).join("")}
-  </div>`;
   return `
   ${ring}
-  ${tabs}
+  <div class="subtabs">
+    ${[["hoje","Hoje"],["semana","Semana"],["matriz","Matriz de ativações"],["registros","Registros"]].map(([id,l])=>
+      `<button class="subtab ${subTarefas===id?"on":""}" onclick="subTarefas='${id}';render()">${l}</button>`).join("")}
+  </div>
   ${sub}`;
 }
 function registrar(itemId,titulo,tipo){
