@@ -836,6 +836,45 @@ const VIEWS=[
 ];
 let missaoAberta=null;
 let quizEstado=null;
+let quizShuffled=null;
+
+/* embaralha uma lista sem mutar o original */
+function shuffleOpts(arr){
+  const a=arr.map((_,i)=>i);
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+/* retorna {nivel, missao, isLastInLevel, isLast} para um id */
+function getMissaoPos(id){
+  for(let ni=0;ni<TRILHA.length;ni++){
+    const nivel=TRILHA[ni];
+    for(let mi=0;mi<nivel.missoes.length;mi++){
+      if(nivel.missoes[mi].id===id){
+        return{ni,mi,
+          isLastInLevel:mi===nivel.missoes.length-1,
+          isLast:ni===TRILHA.length-1&&mi===nivel.missoes.length-1};
+      }
+    }
+  }
+  return null;
+}
+function getNextId(id){
+  const p=getMissaoPos(id);
+  if(!p)return null;
+  if(!p.isLastInLevel)return TRILHA[p.ni].missoes[p.mi+1].id;
+  if(!p.isLast)return TRILHA[p.ni+1].missoes[0].id;
+  return null;
+}
+function getPrevId(id){
+  const p=getMissaoPos(id);
+  if(!p)return null;
+  if(p.mi>0)return TRILHA[p.ni].missoes[p.mi-1].id;
+  if(p.ni>0){const pn=TRILHA[p.ni-1];return pn.missoes[pn.missoes.length-1].id;}
+  return null;
+}
 let subAprender="videos";
 let subTarefas="hoje";
 let buscaQuery="";
@@ -940,53 +979,116 @@ function findMissao(id){
   for(const n of TRILHA){const m=n.missoes.find(x=>x.id===id);if(m)return m}
   return null;
 }
-function abrirMissao(id){missaoAberta=id;quizEstado=null;render()}
+function abrirMissao(id){
+  missaoAberta=id;quizEstado=null;
+  const m=findMissao(id);
+  quizShuffled=m&&m.quiz&&m.quiz.opts?shuffleOpts(m.quiz.opts):null;
+  render();
+}
 function renderMissao(){
   const m=findMissao(missaoAberta);
   if(!m){missaoAberta=null;return renderTrilha()}
   const steps=m.steps||POPS.find(p=>p.id===m.pop)?.steps||[];
   const done=!!DB.training.done[m.id];
+  const pos=getMissaoPos(m.id);
+  const nextId=getNextId(m.id);
+  const prevId=getPrevId(m.id);
+  const shuffled=quizShuffled||(quizShuffled=shuffleOpts(m.quiz.opts.map((_,i)=>i)));
+  const isCorrect=quizEstado!==null&&shuffled[quizEstado]===m.quiz.correct;
+
+  /* rótulo do botão de avanço */
+  const advanceLbl=pos.isLast?'Concluir treinamento ✓':pos.isLastInLevel?'Concluir nível e continuar →':'Continuar →';
+
   return `<div class="missionview">
-    <section class="card section">
-      <button class="btn secondary small" onclick="missaoAberta=null;render()">← Voltar à trilha</button>
-      <h2 style="margin-top:14px">Missão</h2>
-      <div style="font-size:1.5rem;font-weight:850;letter-spacing:-.04em">${esc(m.t)}</div>
-      <p class="muted" style="line-height:1.55">${esc(m.resumo)}</p>
+
+    <!-- cabeçalho com navegação -->
+    <section class="card section" style="padding-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px">
+        <button class="btn secondary small" onclick="missaoAberta=null;render()">← Trilha</button>
+        <div style="display:flex;gap:6px">
+          ${prevId?`<button class="btn secondary small" onclick="abrirMissao('${prevId}')">‹ Anterior</button>`:''}
+          ${nextId?`<button class="btn secondary small" onclick="abrirMissao('${nextId}')">Próxima ›</button>`:''}
+        </div>
+      </div>
+      <div style="font-family:var(--serif);font-size:1.4rem;font-weight:400;margin-bottom:4px">${esc(m.t)}</div>
+      <p class="muted" style="line-height:1.55;margin:0">${esc(m.resumo)}</p>
     </section>
+
+    <!-- vídeo de referência -->
+    <section class="card section">
+      <h2>Referência em vídeo</h2>
+      ${m.video&&m.video.url
+        ? `<button class="vcard" style="border:none;width:100%;cursor:pointer" onclick="openVid('${m.video.url}','${esc(m.t)}')">
+            <div class="vk">${esc(m.video.modulo||'Treinamento')}</div>
+            <strong>${esc(m.video.titulo||m.t)}</strong>
+            <span>${esc(m.video.desc||'')}</span>
+            <div class="vmeta"><span class="mono" style="font-size:.8rem">${esc(m.video.dur||'')}</span>
+              <span class="vplay">▶</span></div>
+          </button>`
+        : `<div style="background:var(--bg-b);border-radius:14px;padding:28px 16px;text-align:center;border:0.5px solid var(--line)">
+            <div style="font-size:2rem;margin-bottom:8px">▶</div>
+            <div style="font-size:.9rem;color:var(--muted)">Vídeo em preparação</div>
+            <div style="font-size:.78rem;color:var(--muted);margin-top:4px;font-family:var(--mono)">Disponível em breve</div>
+          </div>`
+      }
+    </section>
+
+    <!-- passo a passo -->
     <section class="card section">
       <h2>Passo a passo oficial</h2>
       <div class="steps">
         ${steps.map((s,i)=>`<div class="step"><b>${i+1}</b><p>${esc(s)}</p></div>`).join("")}
       </div>
     </section>
+
+    <!-- quiz com opções embaralhadas -->
     <section class="card section">
       <h2>Decisão de campo</h2>
-      <p style="margin:0 0 12px;line-height:1.5">${esc(m.quiz.q)}</p>
+      <p style="margin:0 0 14px;line-height:1.55;font-size:.97rem">${esc(m.quiz.q)}</p>
       <div class="list">
-        ${m.quiz.opts.map((o,i)=>{
+        ${shuffled.map((origIdx,si)=>{
           let cls="";
           if(quizEstado!==null){
-            if(i===m.quiz.correct)cls="correct";
-            else if(i===quizEstado)cls="wrong";
+            if(origIdx===m.quiz.correct)cls="correct";
+            else if(si===quizEstado)cls="wrong";
           }
-          return `<button class="choice ${cls}" onclick="responder(${i})">${esc(o)}</button>`;
+          const disabled=(quizEstado!==null&&isCorrect)||done?'disabled':'';
+          return `<button class="choice ${cls}" ${disabled} onclick="responder(${si})">
+            <span style="flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:var(--bg-b);display:grid;place-items:center;font-size:.72rem;font-weight:600;font-family:var(--mono)">${String.fromCharCode(65+si)}</span>
+            ${esc(m.quiz.opts[origIdx])}
+          </button>`;
         }).join("")}
       </div>
-      ${quizEstado!==null?`<div class="feedback ${quizEstado===m.quiz.correct?"ok":"no"}" style="margin-top:10px">
-        <strong>${quizEstado===m.quiz.correct?"Correto.":"Ainda não."}</strong> ${esc(m.quiz.exp)}
-      </div>`:""}
-      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-        ${quizEstado===m.quiz.correct&&!done?`<button class="btn" onclick="concluirMissao()">Concluir missão ✓</button>`:""}
-        ${done?`<span class="pill good" style="align-self:center">Missão concluída</span>`:""}
+      ${quizEstado!==null
+        ?`<div class="feedback ${isCorrect?'ok':'no'}" style="margin-top:12px">
+            <strong>${isCorrect?'Correto.':'Ainda não.'}</strong> ${esc(m.quiz.exp)}
+          </div>`
+        :''}
+      <div style="margin-top:16px">
+        ${isCorrect&&!done
+          ?`<button class="btn" style="width:100%" onclick="concluirEAvancar()">${advanceLbl}</button>`
+          :''}
+        ${done
+          ?`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+              <span class="pill good">Missão concluída</span>
+              ${nextId?`<button class="btn" onclick="abrirMissao('${nextId}')">Próxima →</button>`:''}
+            </div>`
+          :''}
       </div>
     </section>
+
   </div>`;
 }
-function responder(i){quizEstado=i;render()}
-function concluirMissao(){
+function responder(si){if(quizEstado!==null)return;quizEstado=si;render()}
+function concluirEAvancar(){
   DB.training.done[missaoAberta]=nowBR();
-  save();missaoAberta=null;quizEstado=null;render();
+  save();
+  const nextId=getNextId(missaoAberta);
+  if(nextId){abrirMissao(nextId);}
+  else{missaoAberta=null;quizEstado=null;render();}
 }
+/* compat */
+function concluirMissao(){concluirEAvancar();}
 
 /* ============ PROCEDIMENTOS (o "Google") ============ */
 function highlight(text,q){
